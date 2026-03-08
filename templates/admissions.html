@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Admissions - Suhum Senior Technical School{% endblock %}
+
+{% block page_title %}Admissions Management{% endblock %}
+
+{% block content %}
+<div class="page-content">
+    <div class="page-header">
+        <div class="header-actions">
+            <button class="btn btn-primary" onclick="showAddModal('admission')">
+                <i class="fas fa-plus"></i> New Application
+            </button>
+            <button class="btn btn-secondary" onclick="exportData('admissions')">
+                <i class="fas fa-download"></i> Export
+            </button>
+        </div>
+        <div class="search-box">
+            <input type="text" placeholder="Search applications...">
+            <i class="fas fa-search"></i>
+        </div>
+    </div>
+
+    <div class="filters">
+        <div class="filter-group">
+            <label>Status:</label>
+            <select>
+                <option value="">All Status</option>
+                <option value="Pending">Pending</option>
+                <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>Class:</label>
+            <select>
+                <option value="">All Classes</option>
+                <option value="Form 1">Form 1</option>
+                <option value="Form 2">Form 2</option>
+                <option value="Form 3">Form 3</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Full Name</th>
+                        <th>Gender</th>
+                        <th>Date of Birth</th>
+                        <th>Previous School</th>
+                        <th>Applied Class</th>
+                        <th>Parent Contact</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for admission in admissions %}
+                    <tr>
+                        <td>{{ admission.id }}</td>
+                        <td>{{ admission.first_name }} {{ admission.last_name }}</td>
+                        <td>{{ admission.gender }}</td>
+                        <td>{{ admission.date_of_birth }}</td>
+                        <td>{{ admission.previous_school }}</td>
+                        <td>{{ admission.applied_class }}</td>
+                        <td>{{ admission.parent_phone }}</td>
+                        <td><span class="badge badge-{{ 'success' if admission.status == 'Approved' else 'warning' if admission.status == 'Pending' else 'danger' }}">{{ admission.status }}</span></td>
+                        <td>
+                            <button class="btn-icon"><i class="fas fa-eye"></i></button>
+                            <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                            <button class="btn-icon btn-danger"><i class="fas fa-check"></i></button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Alumni - Suhum Senior Technical School{% endblock %}
+
+{% block page_title %}Alumni (Old Students){% endblock %}
+
+{% block content %}
+<div class="page-content">
+    <div class="page-header">
+        <div class="header-actions">
+            <button class="btn btn-primary" onclick="showAddModal('alumni')">
+                <i class="fas fa-plus"></i> Add Alumni
+            </button>
+            <button class="btn btn-secondary" onclick="exportData('alumni')">
+                <i class="fas fa-download"></i> Export
+            </button>
+        </div>
+        <div class="search-box">
+            <input type="text" placeholder="Search alumni...">
+            <i class="fas fa-search"></i>
+        </div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #9b59b6;">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-info">
+                <h3>250</h3>
+                <p>Total Alumni</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #3498db;">
+                <i class="fas fa-briefcase"></i>
+            </div>
+            <div class="stat-info">
+                <h3>180</h3>
+                <p>Employed</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #38a169;">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div class="stat-info">
+                <h3>45</h3>
+                <p>In University</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Full Name</th>
+                        <th>Gender</th>
+                        <th>Year Left</th>
+                        <th>Class Left</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Occupation</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for alum in alumni %}
+                    <tr>
+                        <td>{{ alum.id }}</td>
+                        <td>{{ alum.first_name }} {{ alum.last_name }}</td>
+                        <td>{{ alum.gender }}</td>
+                        <td>{{ alum.graduation_year }}</td>
+                        <td>{{ alum.class_left }}</td>
+                        <td>{{ alum.phone }}</td>
+                        <td>{{ alum.email }}</td>
+                        <td>{{ alum.occupation }}</td>
+                        <td>
+                            <button class="btn-icon"><i class="fas fa-eye"></i></button>
+                            <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                            <button class="btn-icon btn-danger"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

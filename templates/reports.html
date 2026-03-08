@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Reports - Suhum Senior Technical School{% endblock %}
+
+{% block page_title %}Reports & Analytics{% endblock %}
+
+{% block content %}
+<div class="page-content">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="header-actions">
+            <button class="btn btn-primary" onclick="generateReport()">
+                <i class="fas fa-file-export"></i> Generate Report
+            </button>
+            <button class="btn btn-secondary" onclick="printReport()">
+                <i class="fas fa-print"></i> Print
+            </button>
+        </div>
+    </div>
+
+    <!-- Report Type Selection -->
+    <div class="card">
+        <div class="card-header">
+            <h3>Select Report Type</h3>
+        </div>
+        <div class="card-body">
+            <div class="report-types">
+                <div class="report-card" onclick="selectReport('students')">
+                    <i class="fas fa-user-graduate"></i>
+                    <h4>Student Report</h4>
+                    <p>Complete student listing with details</p>
+                </div>
+                <div class="report-card" onclick="selectReport('attendance')">
+                    <i class="fas fa-calendar-check"></i>
+                    <h4>Attendance Report</h4>
+                    <p>Student attendance summary</p>
+                </div>
+                <div class="report-card" onclick="selectReport('grades')">
+                    <i class="fas fa-chart-line"></i>
+                    <h4>Grades Report</h4>
+                    <p>Student performance and grades</p>
+                </div>
+                <div class="report-card" onclick="selectReport('teachers')">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <h4>Teacher Report</h4>
+                    <p>Teacher listing and subjects</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Filters -->
+    <div class="card">
+        <div class="card-header">
+            <h3>Report Filters</h3>
+        </div>
+        <div class="card-body">
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Class:</label>
+                    <select id="reportClass">
+                        <option value="">All Classes</option>
+                        {% for class in classes %}
+                        <option value="{{ class.id }}">{{ class.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Term:</label>
+                    <select id="reportTerm">
+                        <option value="1">Term 1</option>
+                        <option value="2">Term 2</option>
+                        <option value="3">Term 3</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Format:</label>
+                    <select id="reportFormat">
+                        <option value="pdf">PDF</option>
+                        <option value="excel">Excel</option>
+                        <option value="csv">CSV</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Summary -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3>{{ student_count }}</h3>
+                <p>Total Students</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3>{{ teacher_count }}</h3>
+                <p>Total Teachers</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3>{{ attendance_rate }}%</h3>
+                <p>Attendance Rate</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-info">
+                <h3>{{ pass_rate }}%</h3>
+                <p>Pass Rate</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

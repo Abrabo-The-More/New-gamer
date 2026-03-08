@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Timetable - Suhum Senior Technical School{% endblock %}
+
+{% block page_title %}Class Timetable{% endblock %}
+
+{% block content %}
+<div class="page-content">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="header-actions">
+            <button class="btn btn-primary" onclick="showAddModal('timetable')">
+                <i class="fas fa-plus"></i> Add Timetable
+            </button>
+            <button class="btn btn-secondary" onclick="printTimetable()">
+                <i class="fas fa-print"></i> Print
+            </button>
+        </div>
+    </div>
+
+    <!-- Timetable Filters -->
+    <div class="filters">
+        <div class="filter-group">
+            <label>Class:</label>
+            <select id="timetableClass" onchange="loadTimetable()">
+                <option value="">Select Class</option>
+                {% for class in classes %}
+                <option value="{{ class.id }}">{{ class.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <!-- Timetable -->
+    <div class="card">
+        <div class="card-body">
+            <table class="timetable-table">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Monday</th>
+                        <th>Tuesday</th>
+                        <th>Wednesday</th>
+                        <th>Thursday</th>
+                        <th>Friday</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="time-slot">7:30 - 8:15</td>
+                        <td>Mathematics</td>
+                        <td>English</td>
+                        <td>Science</td>
+                        <td>Mathematics</td>
+                        <td>Technical</td>
+                    </tr>
+                    <tr>
+                        <td class="time-slot">8:15 - 9:00</td>
+                        <td>English</td>
+                        <td>Science</td>
+                        <td>Mathematics</td>
+                        <td>Technical</td>
+                        <td>English</td>
+                    </tr>
+                    <tr>
+                        <td class="time-slot">9:00 - 9:45</td>
+                        <td>Science</td>
+                        <td>Mathematics</td>
+                        <td>Technical</td>
+                        <td>English</td>
+                        <td>Science</td>
+                    </tr>
+                    <tr class="break">
+                        <td class="time-slot">9:45 - 10:00</td>
+                        <td colspan="5" class="text-center">BREAK</td>
+                    </tr>
+                    <tr>
+                        <td class="time-slot">10:00 - 10:45</td>
+                        <td>Technical</td>
+                        <td>Technical</td>
+                        <td>English</td>
+                        <td>Science</td>
+                        <td>Mathematics</td>
+                    </tr>
+                    <tr>
+                        <td class="time-slot">10:45 - 11:30</td>
+                        <td>Social</td>
+                        <td>Technical</td>
+                        <td>Social</td>
+                        <td>Technical</td>
+                        <td>Sports</td>
+                    </tr>
+                    <tr>
+                        <td class="time-slot">11:30 - 12:15</td>
+                        <td>Social</td>
+                        <td>Social</td>
+                        <td>Social</td>
+                        <td>Social</td>
+                        <td>Assembly</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="card">
+        <div class="card-header">
+            <h3>Subject Legend</h3>
+        </div>
+        <div class="card-body">
+            <div class="legend-grid">
+                <div class="legend-item"><span class="legend-color" style="background: #3498db;"></span> Mathematics</div>
+                <div class="legend-item"><span class="legend-color" style="background: #e74c3c;"></span> English</div>
+                <div class="legend-item"><span class="legend-color" style="background: #2ecc71;"></span> Science</div>
+                <div class="legend-item"><span class="legend-color" style="background: #f39c12;"></span> Technical</div>
+                <div class="legend-item"><span class="legend-color" style="background: #9b59b6;"></span> Social Studies</div>
+                <div class="legend-item"><span class="legend-color" style="background: #1abc9c;"></span> Sports</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

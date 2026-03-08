@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Subjects - Suhum Senior Technical School{% endblock %}
+
+{% block page_title %}Subjects Management{% endblock %}
+
+{% block content %}
+<div class="page-content">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="header-actions">
+            <button class="btn btn-primary" onclick="showAddModal('subject')">
+                <i class="fas fa-plus"></i> Add Subject
+            </button>
+        </div>
+    </div>
+
+    <!-- Subjects Table -->
+    <div class="card">
+        <div class="card-body">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Subject Name</th>
+                        <th>Code</th>
+                        <th>Teacher</th>
+                        <th>Class</th>
+                        <th>Credits</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for subject in subjects %}
+                    <tr>
+                        <td>{{ subject.id }}</td>
+                        <td>{{ subject.name }}</td>
+                        <td>{{ subject.code }}</td>
+                        <td>{{ subject.teacher_name }}</td>
+                        <td>{{ subject.class_name }}</td>
+                        <td>{{ subject.credits }}</td>
+                        <td>
+                            <button class="btn-icon" onclick="editSubject({{ subject.id }})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-icon btn-danger" onclick="deleteSubject({{ subject.id }})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Add/Edit Subject Modal -->
+<div class="modal" id="subjectModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Add New Subject</h3>
+            <button class="modal-close" onclick="closeModal('subject')">&times;</button>
+        </div>
+        <form id="subjectForm" method="POST" action="/subjects/save">
+            <div class="modal-body">
+                <input type="hidden" id="subjectId" name="id">
+                
+                <div class="form-group">
+                    <label for="subjectName">Subject Name *</label>
+                    <input type="text" id="subjectName" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subjectCode">Subject Code *</label>
+                    <input type="text" id="subjectCode" name="code" placeholder="e.g., MATH101" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subjectTeacher">Teacher *</label>
+                    <select id="subjectTeacher" name="teacher_id" required>
+                        <option value="">Select Teacher</option>
+                        {% for teacher in teachers %}
+                        <option value="{{ teacher.id }}">{{ teacher.first_name }} {{ teacher.last_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subjectClass">Class *</label>
+                    <select id="subjectClass" name="class_id" required>
+                        <option value="">Select Class</option>
+                        {% for class in classes %}
+                        <option value="{{ class.id }}">{{ class.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subjectCredits">Credits</label>
+                    <input type="number" id="subjectCredits" name="credits" value="3">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('subject')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Subject</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

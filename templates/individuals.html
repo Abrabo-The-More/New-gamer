@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block title %}Staff - Suhum Senior Technical School{% endblock %}
+
+{% block page_title %}Non-Teaching Staff & Activities{% endblock %}
+
+{% block content %}
+<div class="page-content">
+    <div class="page-header">
+        <div class="header-actions">
+            <button class="btn btn-primary" onclick="showAddModal('individual')">
+                <i class="fas fa-plus"></i> Add Staff
+            </button>
+            <button class="btn btn-secondary" onclick="showAddModal('activity')">
+                <i class="fas fa-tasks"></i> Log Activity
+            </button>
+        </div>
+        <div class="search-box">
+            <input type="text" placeholder="Search staff...">
+            <i class="fas fa-search"></i>
+        </div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #3498db;">
+                <i class="fas fa-user-tie"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ staff_count }}</h3>
+                <p>Total Staff</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #38a169;">
+                <i class="fas fa-check"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ active_count }}</h3>
+                <p>Active</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #e74c3c;">
+                <i class="fas fa-times"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ leave_count }}</h3>
+                <p>On Leave</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #f39c12;">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ activity_count }}</h3>
+                <p>Activities Today</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Staff List -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fas fa-users"></i> Staff Directory</h3>
+        </div>
+        <div class="card-body">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Full Name</th>
+                        <th>Gender</th>
+                        <th>Position</th>
+                        <th>Department</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Salary</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for staff in individuals %}
+                    <tr>
+                        <td>{{ staff.id }}</td>
+                        <td>{{ staff.first_name }} {{ staff.last_name }}</td>
+                        <td>{{ staff.gender }}</td>
+                        <td>{{ staff.position }}</td>
+                        <td>{{ staff.department }}</td>
+                        <td>{{ staff.phone }}</td>
+                        <td>{{ staff.email }}</td>
+                        <td>GH₵ {{ staff.salary }}</td>
+                        <td><span class="badge badge-{{ 'success' if staff.status == 'Active' else 'danger' }}">{{ staff.status }}</span></td>
+                        <td>
+                            <button class="btn-icon"><i class="fas fa-eye"></i></button>
+                            <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                            <button class="btn-icon btn-danger"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Staff Activities -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fas fa-tasks"></i> Recent Staff Activities</h3>
+        </div>
+        <div class="card-body">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Staff Name</th>
+                        <th>Activity</th>
+                        <th>Department</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for activity in activities %}
+                    <tr>
+                        <td>{{ activity.id }}</td>
+                        <td>{{ activity.staff_name }}</td>
+                        <td>{{ activity.activity_name }}</td>
+                        <td>{{ activity.department }}</td>
+                        <td>{{ activity.activity_date }}</td>
+                        <td><span class="badge badge-{{ 'success' if activity.status == 'Completed' else 'warning' }}">{{ activity.status }}</span></td>
+                        <td>
+                            <button class="btn-icon"><i class="fas fa-eye"></i></button>
+                            <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Departments Overview -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fas fa-building"></i> Departments</h3>
+        </div>
+        <div class="card-body">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #3498db;">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>4</h3>
+                        <p>Administration</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #38a169;">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>3</h3>
+                        <p>Finance</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #9b59b6;">
+                        <i class="fas fa-broom"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>5</h3>
+                        <p>Catering</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #e74c3c;">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>3</h3>
+                        <p>Security</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

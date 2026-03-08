@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Attendance - Suhum Senior Technical School{% endblock %}
+
+{% block page_title %}Attendance Management{% endblock %}
+
+{% block content %}
+<div class="page-content">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="header-actions">
+            <button class="btn btn-primary" onclick="markAttendance()">
+                <i class="fas fa-clipboard-check"></i> Mark Attendance
+            </button>
+            <button class="btn btn-secondary" onclick="exportData('attendance')">
+                <i class="fas fa-download"></i> Export
+            </button>
+        </div>
+    </div>
+
+    <!-- Attendance Filters -->
+    <div class="filters">
+        <div class="filter-group">
+            <label>Date:</label>
+            <input type="date" id="attendanceDate" value="{{ today }}">
+        </div>
+        <div class="filter-group">
+            <label>Class:</label>
+            <select id="attendanceClass" onchange="loadAttendance()">
+                <option value="">Select Class</option>
+                {% for class in classes %}
+                <option value="{{ class.id }}">{{ class.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <!-- Attendance Card -->
+    <div class="card">
+        <div class="card-header">
+            <h3>Daily Attendance</h3>
+        </div>
+        <div class="card-body">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Student Name</th>
+                        <th>Status</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody id="attendanceTable">
+                    <tr>
+                        <td colspan="4" class="text-center">Select a class to view attendance</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon present">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-info">
+                <h3 id="presentCount">0</h3>
+                <p>Present</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon absent">
+                <i class="fas fa-times-circle"></i>
+            </div>
+            <div class="stat-info">
+                <h3 id="absentCount">0</h3>
+                <p>Absent</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon late">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-info">
+                <h3 id="lateCount">0</h3>
+                <p>Late</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

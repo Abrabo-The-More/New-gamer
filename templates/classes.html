@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Classes - Suhum Senior Technical School{% endblock %}
+
+{% block page_title %}Classes Management{% endblock %}
+
+{% block content %}
+<div class="page-content">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="header-actions">
+            <button class="btn btn-primary" onclick="showAddModal('class')">
+                <i class="fas fa-plus"></i> Add Class
+            </button>
+        </div>
+    </div>
+
+    <!-- Classes Grid -->
+    <div class="classes-grid">
+        {% for class in classes %}
+        <div class="class-card">
+            <div class="class-header">
+                <i class="fas fa-door-open"></i>
+                <h3>{{ class.name }}</h3>
+            </div>
+            <div class="class-body">
+                <div class="class-info">
+                    <p><strong>Class Teacher:</strong> {{ class.teacher_name }}</p>
+                    <p><strong>Students:</strong> {{ class.student_count }}</p>
+                    <p><strong>Capacity:</strong> {{ class.capacity }}</p>
+                </div>
+                <div class="class-actions">
+                    <button class="btn btn-sm" onclick="viewClass({{ class.id }})">
+                        <i class="fas fa-eye"></i> View
+                    </button>
+                    <button class="btn btn-sm" onclick="editClass({{ class.id }})">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        
+        {% if not classes %}
+        <div class="empty-state">
+            <i class="fas fa-door-open"></i>
+            <p>No classes found. Click "Add Class" to create one.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Add/Edit Class Modal -->
+<div class="modal" id="classModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Add New Class</h3>
+            <button class="modal-close" onclick="closeModal('class')">&times;</button>
+        </div>
+        <form id="classForm" method="POST" action="/classes/save">
+            <div class="modal-body">
+                <input type="hidden" id="classId" name="id">
+                
+                <div class="form-group">
+                    <label for="className">Class Name *</label>
+                    <input type="text" id="className" name="name" placeholder="e.g., Form 1A" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="classTeacher">Class Teacher *</label>
+                    <select id="classTeacher" name="teacher_id" required>
+                        <option value="">Select Teacher</option>
+                        {% for teacher in teachers %}
+                        <option value="{{ teacher.id }}">{{ teacher.first_name }} {{ teacher.last_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="classCapacity">Capacity</label>
+                    <input type="number" id="classCapacity" name="capacity" value="40">
+                </div>
+                
+                <div class="form-group">
+                    <label for="classDescription">Description</label>
+                    <textarea id="classDescription" name="description" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('class')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Class</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

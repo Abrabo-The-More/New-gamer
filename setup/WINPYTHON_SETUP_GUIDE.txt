@@ -1,0 +1,271 @@
+================================================================================
+        SUHUM SENIOR TECHNICAL SCHOOL - SCHOOL MANAGEMENT SYSTEM
+                           SETUP GUIDE (WinPython)
+================================================================================
+
+TABLE OF CONTENTS:
+1. What is this?
+2. What you need
+3. Download links
+4. Step-by-step setup
+5. How to run
+6. Login details
+7. Troubleshooting
+
+================================================================================
+1. WHAT IS THIS?
+================================================================================
+
+This is a School Management System for Suhum Senior Technical School. It helps
+manage:
+- Students, Teachers, Parents
+- Attendance, Grades, Timetables
+- Fees, Admissions
+- Non-teaching Staff & their activities
+- Announcements, Events, Meetings
+- Alumni (Old students)
+
+It has a beautiful website where everyone can log in.
+
+================================================================================
+2. WHAT YOU NEED
+================================================================================
+
+- A computer with Windows
+- WinPython (Python without installation)
+- A web browser (Chrome, Edge, Firefox)
+
+That's it! No Python installation needed.
+
+================================================================================
+3. DOWNLOAD LINKS
+================================================================================
+
+A. WinPython (Free - No installation)
+   Download from: https://github.com/winpython/winpython/releases
+   
+   Look for: Winpython64bit-3.12.x.exe (or latest version)
+   File size: ~200MB
+
+B. This project (suhum_sts folder)
+   - You should have received this folder with all the files
+
+================================================================================
+4. STEP-BY-STEP SETUP
+================================================================================
+
+STEP 1: Create a folder on your computer
+--------------------------------------------
+1. Go to your C: drive (or any drive)
+2. Create a new folder called "School"
+   Path should be: C:\School
+
+STEP 2: Download and Extract WinPython
+--------------------------------------------
+1. Go to: https://github.com/winpython/winpython/releases
+2. Download "Winpython64bit-3.12.x.exe"
+3. Run the installer
+4. IMPORTANT: When it asks for installation folder, change it to:
+   
+   C:\School\WinPython
+   
+5. Click "Extract" and wait for it to finish
+
+STEP 3: Copy the Project Files
+--------------------------------------------
+1. Copy the "suhum_sts" folder
+2. Paste it in C:\School\
+
+Your folder should look like this:
+   C:\School\
+   ├── WinPython\           (WinPython program)
+   │   ├── python.exe       (This is Python!)
+   │   └── ...
+   └── suhum_sts\          (The school system)
+       ├── app\
+       ├── templates\
+       ├── static\
+       └── setup\
+
+================================================================================
+5. HOW TO RUN THE APPLICATION
+================================================================================
+
+METHOD 1: Using the Batch File (Recommended)
+---------------------------------------------
+1. Go to: C:\School\suhum_sts\setup\
+2. Double-click: "Run (Place next to WinPython).bat"
+3. A black window will open (command prompt)
+4. Wait for it to install required packages (first time only)
+5. When you see "Running on http://127.0.0.1:5000"
+6. Open your web browser and go to: http://localhost:5000
+
+METHOD 2: Manual (If batch file doesn't work)
+----------------------------------------------
+1. Open Command Prompt (press Windows key + R, type "cmd", press Enter)
+2. Type these commands:
+
+   cd C:\School\suhum_sts\app
+   C:\School\WinPython\python.exe -m pip install flask pyodbc python-dotenv
+   C:\School\WinPython\python.exe app.py
+
+3. Open browser to: http://localhost:5000
+
+================================================================================
+6. LOGIN DETAILS
+================================================================================
+
+You need 3 things to login:
+- Username
+- Password
+- Secret Code
+
+Here are the default login accounts:
+
+┌──────────────┬───────────┬────────────┬────────────────┐
+│ Role         │ Username  │ Password   │ Secret Code    │
+├──────────────┼───────────┼────────────┼────────────────┤
+│ Admin        │ admin     │ admin123   │ admin2026      │
+│ Teacher      │ teacher   │ teacher123 │ teacher2026    │
+│ Student      │ student   │ student123 │ student2026    │
+│ Parent       │ parent    │ parent123  │ parent2026     │
+│ Accountant   │ accountant│ accountant │ account2026    │
+│ Registrar    │ registrar │ registrar1 │ registrar2026  │
+│ Staff        │ staff     │ staff123   │ staff2026      │
+└──────────────┴───────────┴────────────┴────────────────┘
+
+To CHANGE PASSWORDS or SECRET CODES:
+1. Open: C:\School\suhum_sts\app\config.py
+2. Look for the section with usernames/passwords
+3. Change the values
+4. Save the file
+5. Restart the application
+
+================================================================================
+7. TROUBLESHOOTING
+================================================================================
+
+PROBLEM: "WinPython not found" error
+SOLUTION: Make sure WinPython folder is named exactly "WinPython" and is in
+          the same folder as suhum_sts
+
+PROBLEM: "Port 5000 already in use"
+SOLUTION: Another program is using port 5000. Change the port in app.py:
+          Look for: app.run(debug=True, host='0.0.0.0', port=5000)
+          Change to: app.run(debug=True, host='0.0.0.0', port=5001)
+
+PROBLEM: Browser shows "This site can't be reached"
+SOLUTION: Make sure the application is running (black command window is open)
+          Try: http://127.0.0.1:5000 instead of http://localhost:5000
+
+PROBLEM: Login says "Invalid username, password, or secret code"
+SOLUTION: Check that you're entering ALL THREE: username, password, AND secret code
+
+PROBLEM: First time running is slow
+SOLUTION: Normal! It's installing required packages. Wait a minute or two.
+
+================================================================================
+FEATURES IN THIS SYSTEM
+================================================================================
+
+After logging in, you can access:
+
+DASHBOARD
+- Overview of the school
+- Quick stats and actions
+
+STUDENTS
+- Add, edit, view students
+- Student details and records
+
+TEACHERS
+- Teacher information
+- Subjects they teach
+
+CLASSES
+- Class management
+- Class lists
+
+SUBJECTS
+- All subjects/courses
+- Credits and teachers
+
+ATTENDANCE
+- Mark daily attendance
+- View attendance records
+
+GRADES
+- Enter exam scores
+- View student performance
+
+TIMETABLE
+- Class schedules
+- Weekly timetable
+
+ADMISSIONS
+- New student applications
+- Registration process
+
+PARENTS
+- Parent/guardian information
+- Contact details
+
+STAFF (Non-Teaching)
+- Staff directory
+- Daily activities
+- Departments (Finance, Admin, Catering, Security)
+
+ANNOUNCEMENTS
+- School news and notices
+- Categories: General, Academic, Events, Urgent
+
+MEETINGS
+- PTA meetings
+- Staff meetings
+- Minutes
+
+ALUMNI
+- Old students database
+- Career tracking
+
+FEES
+- Fee payment tracking
+- Payment records
+
+EVENTS
+- School events
+- Activities calendar
+
+REPORTS
+- Generate various reports
+
+SETTINGS
+- School configuration
+
+================================================================================
+CHANGING THE SCHOOL NAME
+================================================================================
+
+To change "Suhum Senior Technical School" to your school name:
+
+1. Open: C:\School\suhum_sts\app\config.py
+2. Look for:
+   SCHOOL_NAME = "Suhum Senior Technical School"
+   SCHOOL_LOCATION = "Suhum, Eastern Region, Ghana"
+   SCHOOL_PHONE = "0244-123-456"
+   SCHOOL_EMAIL = "info@suhumsts.edu.gh"
+
+3. Change the values to your school details
+4. Save the file
+5. Restart the application
+
+================================================================================
+                       ENJOY USING THE SYSTEM!
+================================================================================
+
+If you need help, contact the system administrator.
+
+Created for: Suhum Senior Technical School
+Location: Suhum, Eastern Region, Ghana
+Version: 2.0
+================================================================================

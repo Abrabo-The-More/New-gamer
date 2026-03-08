@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}Teachers - Suhum Senior Technical School{% endblock %}
+
+{% block page_title %}Teachers Management{% endblock %}
+
+{% block content %}
+<div class="page-content">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="header-actions">
+            <button class="btn btn-primary" onclick="showAddModal('teacher')">
+                <i class="fas fa-plus"></i> Add Teacher
+            </button>
+            <button class="btn btn-secondary" onclick="exportData('teachers')">
+                <i class="fas fa-download"></i> Export
+            </button>
+        </div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search teachers..." onkeyup="searchTable()">
+            <i class="fas fa-search"></i>
+        </div>
+    </div>
+
+    <!-- Teachers Table -->
+    <div class="card">
+        <div class="card-body">
+            <table class="data-table" id="teachersTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Full Name</th>
+                        <th>Gender</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Subject</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for teacher in teachers %}
+                    <tr>
+                        <td>{{ teacher.id }}</td>
+                        <td>{{ teacher.first_name }} {{ teacher.last_name }}</td>
+                        <td>{{ teacher.gender }}</td>
+                        <td>{{ teacher.email }}</td>
+                        <td>{{ teacher.phone }}</td>
+                        <td>{{ teacher.subject }}</td>
+                        <td><span class="badge badge-{{ 'success' if teacher.status == 'Active' else 'danger' }}">{{ teacher.status }}</span></td>
+                        <td>
+                            <button class="btn-icon" onclick="viewTeacher({{ teacher.id }})" title="View">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn-icon" onclick="editTeacher({{ teacher.id }})" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-icon btn-danger" onclick="deleteTeacher({{ teacher.id }})" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            {% if not teachers %}
+            <div class="empty-state">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <p>No teachers found. Click "Add Teacher" to get started.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Add/Edit Teacher Modal -->
+<div class="modal" id="teacherModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="teacherModalTitle">Add New Teacher</h3>
+            <button class="modal-close" onclick="closeModal('teacher')">&times;</button>
+        </div>
+        <form id="teacherForm" method="POST" action="/teachers/save">
+            <div class="modal-body">
+                <input type="hidden" id="teacherId" name="id">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="teacherFirstName">First Name *</label>
+                        <input type="text" id="teacherFirstName" name="first_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="teacherLastName">Last Name *</label>
+                        <input type="text" id="teacherLastName" name="last_name" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="teacherGender">Gender *</label>
+                        <select id="teacherGender" name="gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="teacherDob">Date of Birth</label>
+                        <input type="date" id="teacherDob" name="date_of_birth">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="teacherEmail">Email *</label>
+                        <input type="email" id="teacherEmail" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="teacherPhone">Phone *</label>
+                        <input type="tel" id="teacherPhone" name="phone" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="teacherSubject">Subject *</label>
+                    <select id="teacherSubject" name="subject_id" required>
+                        <option value="">Select Subject</option>
+                        <option value="1">Mathematics</option>
+                        <option value="2">English</option>
+                        <option value="3">Science</option>
+                        <option value="4">Technical</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="teacherAddress">Address</label>
+                    <input type="text" id="teacherAddress" name="address">
+                </div>
+                
+                <div class="form-group">
+                    <label for="teacherQualification">Qualification</label>
+                    <input type="text" id="teacherQualification" name="qualification">
+                </div>
+                
+                <div class="form-group">
+                    <label for="teacherStatus">Status</label>
+                    <select id="teacherStatus" name="status">
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('teacher')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Teacher</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

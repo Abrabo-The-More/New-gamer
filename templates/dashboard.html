@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Suhum Senior Technical School{% endblock %}
+
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon students">
+                <i class="fas fa-user-graduate"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ student_count }}</h3>
+                <p>Total Students</p>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon teachers">
+                <i class="fas fa-chalkboard-teacher"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ teacher_count }}</h3>
+                <p>Total Teachers</p>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon classes">
+                <i class="fas fa-door-open"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ class_count }}</h3>
+                <p>Total Classes</p>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon subjects">
+                <i class="fas fa-book"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ subject_count }}</h3>
+                <p>Total Subjects</p>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #e74c3c;">
+                <i class="fas fa-user-plus"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ admission_count }}</h3>
+                <p>New Admissions</p>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #9b59b6;">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ parent_count }}</h3>
+                <p>Parents</p>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #f39c12;">
+                <i class="fas fa-user-tie"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ staff_count }}</h3>
+                <p>Staff</p>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #38a169;">
+                <i class="fas fa-user-graduate"></i>
+            </div>
+            <div class="stat-info">
+                <h3>{{ alumni_count }}</h3>
+                <p>Alumni</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <h3>Quick Actions</h3>
+        <div class="actions-grid">
+            <a href="/students?action=add" class="action-card">
+                <i class="fas fa-user-plus"></i>
+                <span>Add Student</span>
+            </a>
+            <a href="/teachers?action=add" class="action-card">
+                <i class="fas fa-user-tie"></i>
+                <span>Add Teacher</span>
+            </a>
+            <a href="/attendance?action=mark" class="action-card">
+                <i class="fas fa-clipboard-check"></i>
+                <span>Mark Attendance</span>
+            </a>
+            <a href="/grades?action=entry" class="action-card">
+                <i class="fas fa-pen"></i>
+                <span>Enter Grades</span>
+            </a>
+            <a href="/reports?action=generate" class="action-card">
+                <i class="fas fa-file-export"></i>
+                <span>Generate Report</span>
+            </a>
+            <a href="/timetable?action=view" class="action-card">
+                <i class="fas fa-calendar-alt"></i>
+                <span>View Timetable</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Recent Activity & Announcements -->
+    <div class="dashboard-grid">
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-bell"></i> Announcements</h3>
+            </div>
+            <div class="card-body">
+                <div class="announcement-list">
+                    <div class="announcement">
+                        <span class="date">Mar 07, 2026</span>
+                        <p>Mid-term examinations scheduled for next week. Please prepare accordingly.</p>
+                    </div>
+                    <div class="announcement">
+                        <span class="date">Mar 05, 2026</span>
+                        <p>Parent-Teacher Association meeting this Friday at 2:00 PM.</p>
+                    </div>
+                    <div class="announcement">
+                        <span class="date">Mar 01, 2026</span>
+                        <p>School fees payment deadline extended to end of this month.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-chart-pie"></i> Class Distribution</h3>
+            </div>
+            <div class="card-body">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Class</th>
+                            <th>Students</th>
+                            <th>Teacher</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for class in classes %}
+                        <tr>
+                            <td>{{ class.name }}</td>
+                            <td>{{ class.student_count }}</td>
+                            <td>{{ class.teacher_name }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upcoming Events -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fas fa-calendar"></i> Upcoming Events</h3>
+        </div>
+        <div class="card-body">
+            <div class="events-list">
+                <div class="event">
+                    <div class="event-date">
+                        <span class="day">10</span>
+                        <span class="month">Mar</span>
+                    </div>
+                    <div class="event-details">
+                        <h4>Mid-term Examinations Begin</h4>
+                        <p>All students must be present</p>
+                    </div>
+                </div>
+                <div class="event">
+                    <div class="event-date">
+                        <span class="day">15</span>
+                        <span class="month">Mar</span>
+                    </div>
+                    <div class="event-details">
+                        <h4>Career Day</h4>
+                        <p>Guest speakers from various industries</p>
+                    </div>
+                </div>
+                <div class="event">
+                    <div class="event-date">
+                        <span class="day">20</span>
+                        <span class="month">Mar</span>
+                    </div>
+                    <div class="event-details">
+                        <h4>Sports Day</h4>
+                        <p>Annual inter-house sports competition</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+# Suhum Senior Technical School - Setup Guide
+
+## Quick Setup (3 Steps)
+
+### Step 1: Download WinPython
+1. Go to: https://github.com/winpython/winpython/releases
+2. Download: `Winpython64bit-3.12.x.exe` (or latest version)
+3. Extract to a folder named `WinPython`
+
+### Step 2: Get the Project
+1. Copy the `suhum_sts` folder
+2. Place it next to the `WinPython` folder
+
+Your folder should look like this:
+```
+C:\School\
+├── WinPython\          (WinPython folder)
+└── suhum_sts\          (Project folder)
+    ├── setup\
+    ├── app\
+    ├── templates\
+    └── ...
+```
+
+### Step 3: Run the App
+1. Go to `suhum_sts\setup\`
+2. Double-click `Run (Place next to WinPython).bat`
+3. Wait for installation to complete
+4. Open browser to: http://localhost:5000
+
+---
+
+## Login Credentials
+
+| Role | Username | Password |
+|------|----------|----------|
+| Admin | admin | admin123 |
+| Teacher | teacher | teacher123 |
+| Student | student | student123 |
+
+---
+
+## Troubleshooting
+
+### "WinPython not found" error
+Make sure:
+- WinPython folder is named exactly "WinPython"
+- It's in the same parent folder as suhum_sts
+
+### Port 5000 already in use
+Edit `app/app.py` and change port:
+```python
+app.run(debug=True, host='0.0.0.0', port=5001)
+```
+
+### Need help?
+Just ask!

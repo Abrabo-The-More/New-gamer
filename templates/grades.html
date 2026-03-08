@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block title %}Grades - Suhum Senior Technical School{% endblock %}
+
+{% block page_title %}Grades Management{% endblock %}
+
+{% block content %}
+<div class="page-content">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="header-actions">
+            <button class="btn btn-primary" onclick="showAddModal('grade')">
+                <i class="fas fa-pen"></i> Enter Grades
+            </button>
+            <button class="btn btn-secondary" onclick="exportData('grades')">
+                <i class="fas fa-download"></i> Export
+            </button>
+        </div>
+    </div>
+
+    <!-- Grades Filters -->
+    <div class="filters">
+        <div class="filter-group">
+            <label>Class:</label>
+            <select id="gradeClass" onchange="loadGrades()">
+                <option value="">Select Class</option>
+                {% for class in classes %}
+                <option value="{{ class.id }}">{{ class.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>Subject:</label>
+            <select id="gradeSubject" onchange="loadGrades()">
+                <option value="">Select Subject</option>
+                {% for subject in subjects %}
+                <option value="{{ subject.id }}">{{ subject.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>Term:</label>
+            <select id="gradeTerm" onchange="loadGrades()">
+                <option value="1">Term 1</option>
+                <option value="2">Term 2</option>
+                <option value="3">Term 3</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Grades Table -->
+    <div class="card">
+        <div class="card-header">
+            <h3>Student Grades</h3>
+        </div>
+        <div class="card-body">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Student Name</th>
+                        <th>Subject</th>
+                        <th>CA (30%)</th>
+                        <th>Exam (70%)</th>
+                        <th>Total</th>
+                        <th>Grade</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="gradesTable">
+                    {% for grade in grades %}
+                    <tr>
+                        <td>{{ grade.student_id }}</td>
+                        <td>{{ grade.student_name }}</td>
+                        <td>{{ grade.subject_name }}</td>
+                        <td>{{ grade.ca_score }}</td>
+                        <td>{{ grade.exam_score }}</td>
+                        <td>{{ grade.total }}</td>
+                        <td><span class="badge badge-{{ 'success' if grade.grade in ['A', 'B'] else 'warning' if grade.grade == 'C' else 'danger' }}">{{ grade.grade }}</span></td>
+                        <td>
+                            <button class="btn-icon" onclick="editGrade({{ grade.id }})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Grade Scale Reference -->
+    <div class="card">
+        <div class="card-header">
+            <h3>Grade Scale</h3>
+        </div>
+        <div class="card-body">
+            <table class="data-table grade-scale">
+                <thead>
+                    <tr>
+                        <th>Grade</th>
+                        <th>Mark Range</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="badge badge-success">A</span></td>
+                        <td>80 - 100</td>
+                        <td>Excellent</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-success">B</span></td>
+                        <td>70 - 79</td>
+                        <td>Very Good</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-warning">C</span></td>
+                        <td>60 - 69</td>
+                        <td>Good</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-warning">D</span></td>
+                        <td>50 - 59</td>
+                        <td>Pass</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-danger">F</span></td>
+                        <td>0 - 49</td>
+                        <td>Fail</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Enter Grade Modal -->
+<div class="modal" id="gradeModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Enter Student Grade</h3>
+            <button class="modal-close" onclick="closeModal('grade')">&times;</button>
+        </div>
+        <form id="gradeForm" method="POST" action="/grades/save">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="gradeStudent">Student *</label>
+                    <select id="gradeStudent" name="student_id" required>
+                        <option value="">Select Student</option>
+                        {% for student in students %}
+                        <option value="{{ student.id }}">{{ student.first_name }} {{ student.last_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="gradeSubjectSelect">Subject *</label>
+                    <select id="gradeSubjectSelect" name="subject_id" required>
+                        <option value="">Select Subject</option>
+                        {% for subject in subjects %}
+                        <option value="{{ subject.id }}">{{ subject.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="gradeTermSelect">Term *</label>
+                    <select id="gradeTermSelect" name="term" required>
+                        <option value="1">Term 1</option>
+                        <option value="2">Term 2</option>
+                        <option value="3">Term 3</option>
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="caScore">CA Score (0-30) *</label>
+                        <input type="number" id="caScore" name="ca_score" min="0" max="30" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="examScore">Exam Score (0-70) *</label>
+                        <input type="number" id="examScore" name="exam_score" min="0" max="70" required>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('grade')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Grade</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Meetings - Suhum Senior Technical School{% endblock %}
+
+{% block page_title %}Meetings & Minutes{% endblock %}
+
+{% block content %}
+<div class="page-content">
+    <div class="page-header">
+        <div class="header-actions">
+            <button class="btn btn-primary" onclick="showAddModal('meeting')">
+                <i class="fas fa-plus"></i> Schedule Meeting
+            </button>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Upcoming Meetings</h3>
+        </div>
+        <div class="card-body">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Type</th>
+                        <th>Date & Time</th>
+                        <th>Venue</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for meeting in meetings %}
+                    <tr>
+                        <td>{{ meeting.id }}</td>
+                        <td>{{ meeting.title }}</td>
+                        <td>{{ meeting.meeting_type }}</td>
+                        <td>{{ meeting.meeting_date }}</td>
+                        <td>{{ meeting.venue }}</td>
+                        <td><span class="badge badge-{{ 'success' if meeting.status == 'Completed' else 'warning' }}">{{ meeting.status }}</span></td>
+                        <td>
+                            <button class="btn-icon"><i class="fas fa-eye"></i></button>
+                            <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                            <button class="btn-icon"><i class="fas fa-file-alt"></i></button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Past Meetings & Minutes</h3>
+        </div>
+        <div class="card-body">
+            <p>Previous meeting records and minutes will appear here.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

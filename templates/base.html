@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Suhum Senior Technical School{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Login Page (shown when not logged in) -->
+    {% if not session.get('logged_in') %}
+    <div class="login-container">
+        <div class="login-box">
+            <div class="school-logo">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h1>Suhum Senior Technical School</h1>
+            <p class="location"><i class="fas fa-map-marker-alt"></i> Suhum, Eastern Region, Ghana</p>
+            
+            {% if error %}
+            <div class="alert alert-error">{{ error }}</div>
+            {% endif %}
+            
+            <form method="POST" action="/login" class="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="secret_code">Secret Code</label>
+                    <input type="password" id="secret_code" name="secret_code" placeholder="Enter secret code" required>
+                </div>
+                <div class="form-group">
+                    <label for="role">Login As</label>
+                    <select id="role" name="role" required>
+                        <option value="">Select Role</option>
+                        <option value="admin">Administrator</option>
+                        <option value="teacher">Teacher</option>
+                        <option value="student">Student</option>
+                        <option value="parent">Parent</option>
+                        <option value="accountant">Accountant</option>
+                        <option value="registrar">Registrar</option>
+                        <option value="staff">Non-Teaching Staff</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Login</button>
+            </form>
+            
+            <div class="login-footer">
+                <p>School Management System v2.0</p>
+                <p class="help-text">Need help? Contact the school administrator</p>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    
+    <!-- Main Application (shown when logged in) -->
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-graduation-cap"></i>
+                <span>STS</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/dashboard" class="{% if active_page == 'dashboard' %}active{% endif %}">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+                <a href="/students" class="{% if active_page == 'students' %}active{% endif %}">
+                    <i class="fas fa-user-graduate"></i> Students
+                </a>
+                <a href="/teachers" class="{% if active_page == 'teachers' %}active{% endif %}">
+                    <i class="fas fa-chalkboard-teacher"></i> Teachers
+                </a>
+                <a href="/classes" class="{% if active_page == 'classes' %}active{% endif %}">
+                    <i class="fas fa-door-open"></i> Classes
+                </a>
+                <a href="/subjects" class="{% if active_page == 'subjects' %}active{% endif %}">
+                    <i class="fas fa-book"></i> Subjects
+                </a>
+                <a href="/attendance" class="{% if active_page == 'attendance' %}active{% endif %}">
+                    <i class="fas fa-calendar-check"></i> Attendance
+                </a>
+                <a href="/grades" class="{% if active_page == 'grades' %}active{% endif %}">
+                    <i class="fas fa-chart-line"></i> Grades
+                </a>
+                <a href="/timetable" class="{% if active_page == 'timetable' %}active{% endif %}">
+                    <i class="fas fa-clock"></i> Timetable
+                </a>
+                <a href="/admissions" class="{% if active_page == 'admissions' %}active{% endif %}">
+                    <i class="fas fa-user-plus"></i> Admissions
+                </a>
+                <a href="/parents" class="{% if active_page == 'parents' %}active{% endif %}">
+                    <i class="fas fa-users"></i> Parents
+                </a>
+                <a href="/individuals" class="{% if active_page == 'individuals' %}active{% endif %}">
+                    <i class="fas fa-user-tie"></i> Staff
+                </a>
+                <a href="/announcements" class="{% if active_page == 'announcements' %}active{% endif %}">
+                    <i class="fas fa-bullhorn"></i> Announcements
+                </a>
+                <a href="/meetings" class="{% if active_page == 'meetings' %}active{% endif %}">
+                    <i class="fas fa-handshake"></i> Meetings
+                </a>
+                <a href="/alumni" class="{% if active_page == 'alumni' %}active{% endif %}">
+                    <i class="fas fa-user-graduate"></i> Alumni
+                </a>
+                <a href="/fees" class="{% if active_page == 'fees' %}active{% endif %}">
+                    <i class="fas fa-money-bill"></i> Fees
+                </a>
+                <a href="/events" class="{% if active_page == 'events' %}active{% endif %}">
+                    <i class="fas fa-calendar"></i> Events
+                </a>
+                <a href="/reports" class="{% if active_page == 'reports' %}active{% endif %}">
+                    <i class="fas fa-file-alt"></i> Reports
+                </a>
+                <a href="/settings" class="{% if active_page == 'settings' %}active{% endif %}">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="menu-toggle" id="menuToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2>{% block page_title %}Dashboard{% endblock %}</h2>
+                </div>
+                <div class="header-right">
+                    <div class="school-info">
+                        <span class="school-name">Suhum Senior Technical School</span>
+                        <span class="school-location">Suhum, Eastern Region</span>
+                    </div>
+                    <div class="user-profile">
+                        <span class="user-name">{{ session.get('user_name', 'User') }}</span>
+                        <span class="user-role">{{ session.get('user_role', '').title() }}</span>
+                        <a href="/logout" class="btn btn-sm btn-logout">Logout</a>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="content">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+    {% endif %}
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

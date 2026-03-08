@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Fees - Suhum Senior Technical School{% endblock %}
+
+{% block page_title %}Fees & Payments{% endblock %}
+
+{% block content %}
+<div class="page-content">
+    <div class="page-header">
+        <div class="header-actions">
+            <button class="btn btn-primary" onclick="showAddModal('fee')">
+                <i class="fas fa-plus"></i> Add Fee
+            </button>
+            <button class="btn btn-success">
+                <i class="fas fa-money-bill-wave"></i> Record Payment
+            </button>
+        </div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #e74c3c;">
+                <i class="fas fa-exclamation-circle"></i>
+            </div>
+            <div class="stat-info">
+                <h3>GH₵ 45,000</h3>
+                <p>Outstanding</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #38a169;">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-info">
+                <h3>GH₵ 120,000</h3>
+                <p>Collected</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon" style="background: #3498db;">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-info">
+                <h3>450</h3>
+                <p>Students</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Student</th>
+                        <th>Fee Type</th>
+                        <th>Amount</th>
+                        <th>Due Date</th>
+                        <th>Paid Date</th>
+                        <th>Status</th>
+                        <th>Receipt</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fee in fees %}
+                    <tr>
+                        <td>{{ fee.id }}</td>
+                        <td>{{ fee.student_name }}</td>
+                        <td>{{ fee.fee_type }}</td>
+                        <td>GH₵ {{ fee.amount }}</td>
+                        <td>{{ fee.due_date }}</td>
+                        <td>{{ fee.paid_date or '-' }}</td>
+                        <td><span class="badge badge-{{ 'success' if fee.payment_status == 'Paid' else 'danger' }}">{{ fee.payment_status }}</span></td>
+                        <td>{{ fee.receipt_number or '-' }}</td>
+                        <td>
+                            <button class="btn-icon"><i class="fas fa-eye"></i></button>
+                            <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                            <button class="btn-icon btn-success"><i class="fas fa-check"></i></button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

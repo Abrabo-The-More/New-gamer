@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block title %}Students - Suhum Senior Technical School{% endblock %}
+
+{% block page_title %}Students Management{% endblock %}
+
+{% block content %}
+<div class="page-content">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="header-actions">
+            <button class="btn btn-primary" onclick="showAddModal('student')">
+                <i class="fas fa-plus"></i> Add Student
+            </button>
+            <button class="btn btn-secondary" onclick="exportData('students')">
+                <i class="fas fa-download"></i> Export
+            </button>
+        </div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search students..." onkeyup="searchTable()">
+            <i class="fas fa-search"></i>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters">
+        <div class="filter-group">
+            <label>Class:</label>
+            <select id="filterClass" onchange="filterTable()">
+                <option value="">All Classes</option>
+                <option value="Form 1">Form 1</option>
+                <option value="Form 2">Form 2</option>
+                <option value="Form 3">Form 3</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label>Status:</label>
+            <select id="filterStatus" onchange="filterTable()">
+                <option value="">All Status</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Students Table -->
+    <div class="card">
+        <div class="card-body">
+            <table class="data-table" id="studentsTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Full Name</th>
+                        <th>Gender</th>
+                        <th>Date of Birth</th>
+                        <th>Class</option>
+                        <th>Parent Contact</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student.id }}</td>
+                        <td>{{ student.first_name }} {{ student.last_name }}</td>
+                        <td>{{ student.gender }}</td>
+                        <td>{{ student.date_of_birth }}</td>
+                        <td>{{ student.class_name }}</td>
+                        <td>{{ student.parent_contact }}</td>
+                        <td><span class="badge badge-{{ 'success' if student.status == 'Active' else 'danger' }}">{{ student.status }}</span></td>
+                        <td>
+                            <button class="btn-icon" onclick="viewStudent({{ student.id }})" title="View">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn-icon" onclick="editStudent({{ student.id }})" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-icon btn-danger" onclick="deleteStudent({{ student.id }})" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            {% if not students %}
+            <div class="empty-state">
+                <i class="fas fa-user-graduate"></i>
+                <p>No students found. Click "Add Student" to get started.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        <span class="page-info">Showing {{ students|length }} students</span>
+        <div class="page-numbers">
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+        </div>
+    </div>
+</div>
+
+<!-- Add/Edit Student Modal -->
+<div class="modal" id="studentModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalTitle">Add New Student</h3>
+            <button class="modal-close" onclick="closeModal('student')">&times;</button>
+        </div>
+        <form id="studentForm" method="POST" action="/students/save">
+            <div class="modal-body">
+                <input type="hidden" id="studentId" name="id">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name *</label>
+                        <input type="text" id="firstName" name="first_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name *</label>
+                        <input type="text" id="lastName" name="last_name" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="gender">Gender *</label>
+                        <select id="gender" name="gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="dob">Date of Birth *</label>
+                        <input type="date" id="dob" name="date_of_birth" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="classSelect">Class *</label>
+                        <select id="classSelect" name="class_id" required>
+                            <option value="">Select Class</option>
+                            <option value="1">Form 1</option>
+                            <option value="2">Form 2</option>
+                            <option value="3">Form 3</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="admissionDate">Admission Date</label>
+                        <input type="date" id="admissionDate" name="admission_date">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input type="text" id="address" name="address">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="parentName">Parent/Guardian Name *</label>
+                        <input type="text" id="parentName" name="parent_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="parentContact">Parent Contact *</label>
+                        <input type="tel" id="parentContact" name="parent_contact" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="studentStatus">Status</label>
+                    <select id="studentStatus" name="status">
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('student')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Student</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
