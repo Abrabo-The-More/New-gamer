@@ -29,6 +29,7 @@ function loadDashboardData() {
     
     document.getElementById('totalStudents').textContent = stats.totalStudents;
     document.getElementById('totalTeachers').textContent = stats.totalTeachers;
+    document.getElementById('totalNonTeaching').textContent = stats.totalNonTeachingStaff;
     document.getElementById('totalClasses').textContent = stats.totalClasses;
     document.getElementById('unpaidFees').textContent = stats.unpaidFees;
     document.getElementById('paidFees').textContent = stats.paidFees;
@@ -44,6 +45,9 @@ function loadAllTables() {
     loadTeachersTable();
     loadFeesTable();
     loadStaffTable();
+    loadParentsTable();
+    loadNonTeachingTable();
+    loadVisitorsTable();
     loadAnnouncementsFull();
 }
 
@@ -59,9 +63,9 @@ function loadStudentsTable() {
             <td>${student.admissionNo}</td>
             <td>${student.firstName} ${student.lastName}</td>
             <td>${student.gender}</td>
-            <td>${student.class}</td>
+            <td>Form ${student.classId}</td>
             <td>${student.section}</td>
-            <td>${student.parentPhone}</td>
+            <td>${student.phone}</td>
             <td><span class="badge badge-success">${student.status}</span></td>
             <td class="actions">
                 <button class="btn-icon" title="View"><i class="fas fa-eye"></i></button>
@@ -70,6 +74,104 @@ function loadStudentsTable() {
             </td>
         </tr>
     `).join('');
+}
+
+// Load parents table
+function loadParentsTable() {
+    const parents = Database.getTable('parents');
+    const students = Database.getTable('students');
+    const tbody = document.getElementById('parentsTable');
+    
+    if (!tbody) return;
+    
+    tbody.innerHTML = parents.map(parent => {
+        const student = students.find(s => s.id === parent.studentId);
+        return `
+            <tr>
+                <td>${parent.fatherName}</td>
+                <td>${parent.motherName}</td>
+                <td>${parent.phone}</td>
+                <td>${parent.altPhone || '-'}</td>
+                <td>${parent.email}</td>
+                <td>${parent.occupation}</td>
+                <td>${student ? student.firstName + ' ' + student.lastName : 'N/A'}</td>
+                <td class="actions">
+                    <button class="btn-icon"><i class="fas fa-eye"></i></button>
+                    <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                    <button class="btn-icon danger"><i class="fas fa-trash"></i></button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+    
+    // Update stats
+    document.getElementById('totalParents').textContent = parents.length;
+    document.getElementById('verifiedParents').textContent = parents.filter(p => p.phone).length;
+}
+
+// Load non-teaching staff table
+function loadNonTeachingTable() {
+    const staff = Database.getTable('nonTeachingStaff');
+    const tbody = document.getElementById('nonTeachingTable');
+    
+    if (!tbody) return;
+    
+    tbody.innerHTML = staff.map(s => `
+        <tr>
+            <td>${s.staffNo}</td>
+            <td>${s.firstName} ${s.lastName}</td>
+            <td>${s.gender}</td>
+            <td>${s.position}</td>
+            <td>${s.department}</td>
+            <td>${s.phone}</td>
+            <td>GH₵ ${s.salary}</td>
+            <td><span class="badge badge-success">${s.status}</span></td>
+            <td class="actions">
+                <button class="btn-icon"><i class="fas fa-eye"></i></button>
+                <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                <button class="btn-icon danger"><i class="fas fa-trash"></i></button>
+            </td>
+        </tr>
+    `).join('');
+    
+    // Update stats
+    document.getElementById('totalNonTeaching').textContent = staff.length;
+    const totalSalary = staff.reduce((sum, s) => sum + s.salary, 0);
+    document.getElementById('totalSalary').textContent = 'GH₵ ' + totalSalary.toLocaleString();
+}
+
+// Load visitors table
+function loadVisitorsTable() {
+    const visitors = Database.getTable('visitors');
+    const tbody = document.getElementById('visitorsTable');
+    
+    if (!tbody) return;
+    
+    tbody.innerHTML = visitors.map(v => {
+        const statusClass = v.status === 'Checked In' ? 'warning' : 'success';
+        return `
+            <tr>
+                <td>${v.visitorId}</td>
+                <td>${v.name}</td>
+                <td>${v.phone}</td>
+                <td>${v.purpose}</td>
+                <td>${v.host}</td>
+                <td>${v.date}</td>
+                <td>${v.timeIn}</td>
+                <td>${v.timeOut || '-'}</td>
+                <td><span class="badge badge-${statusClass}">${v.status}</span></td>
+                <td class="actions">
+                    <button class="btn-icon"><i class="fas fa-eye"></i></button>
+                    <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                    <button class="btn-icon danger"><i class="fas fa-trash"></i></button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+    
+    // Update stats
+    document.getElementById('totalVisitors').textContent = visitors.length;
+    document.getElementById('checkedIn').textContent = visitors.filter(v => v.status === 'Checked In').length;
 }
 
 // Load teachers table
@@ -221,7 +323,7 @@ function setupNavigation() {
 // Navigate to page
 function navigateTo(page) {
     // Hide all pages
-    const pages = ['dashboardPage', 'studentsPage', 'teachersPage', 'classesPage', 
+    const pages = ['dashboardPage', 'studentsPage', 'teachersPage', 'nonteachingPage', 'parentsPage', 'visitorsPage', 'classesPage', 
                   'subjectsPage', 'attendancePage', 'gradesPage', 'feesPage', 
                   'admissionsPage', 'staffPage', 'libraryPage', 'inventoryPage',
                   'announcementsPage', 'messagesPage', 'reportsPage', 'settingsPage',
@@ -236,7 +338,10 @@ function navigateTo(page) {
     const pageTitles = {
         dashboard: 'Dashboard',
         students: 'Students',
-        teachers: 'Teachers',
+        teachers: 'Teaching Staff',
+        nonteaching: 'Non-Teaching Staff',
+        parents: 'Parents/Guardians',
+        visitors: 'Visitors/Outsiders',
         classes: 'Classes',
         subjects: 'Subjects',
         attendance: 'Attendance',

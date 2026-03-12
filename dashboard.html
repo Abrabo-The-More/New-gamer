@@ -32,7 +32,7 @@
                 </div>
                 
                 <div class="nav-section">
-                    <div class="nav-section-title">Academic</div>
+                    <div class="nav-section-title">People</div>
                     <a href="#" class="nav-item" data-page="students">
                         <i class="fas fa-user-graduate"></i>
                         <span>Students</span>
@@ -40,19 +40,19 @@
                     </a>
                     <a href="#" class="nav-item" data-page="teachers">
                         <i class="fas fa-chalkboard-teacher"></i>
-                        <span>Teachers</span>
+                        <span>Teaching Staff</span>
                     </a>
-                    <a href="#" class="nav-item" data-page="classes">
-                        <i class="fas fa-door-open"></i>
-                        <span>Classes</span>
+                    <a href="#" class="nav-item" data-page="nonteaching">
+                        <i class="fas fa-user-tie"></i>
+                        <span>Non-Teaching Staff</span>
                     </a>
-                    <a href="#" class="nav-item" data-page="subjects">
-                        <i class="fas fa-book"></i>
-                        <span>Subjects</span>
+                    <a href="#" class="nav-item" data-page="parents">
+                        <i class="fas fa-users"></i>
+                        <span>Parents</span>
                     </a>
-                    <a href="#" class="nav-item" data-page="timetable">
-                        <i class="fas fa-calendar-alt"></i>
-                        <span>Timetable</span>
+                    <a href="#" class="nav-item" data-page="visitors">
+                        <i class="fas fa-walking"></i>
+                        <span>Visitors/Outsiders</span>
                     </a>
                 </div>
                 
@@ -179,9 +179,22 @@
                             </div>
                             <div class="stat-content">
                                 <h3 id="totalTeachers">0</h3>
-                                <p>Teachers</p>
+                                <p>Teaching Staff</p>
                                 <div class="stat-trend up">
                                     <i class="fas fa-arrow-up"></i> 2 new
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card info animate-slideIn">
+                            <div class="stat-icon">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="totalNonTeaching">0</h3>
+                                <p>Non-Teaching Staff</p>
+                                <div class="stat-trend up">
+                                    <i class="fas fa-arrow-up"></i> Active
                                 </div>
                             </div>
                         </div>
@@ -431,6 +444,147 @@
                                     </tr>
                                 </thead>
                                 <tbody id="announcementsTableFull">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Parents Page -->
+                <div id="parentsPage" style="display: none;">
+                    <div class="stats-grid">
+                        <div class="stat-card primary">
+                            <div class="stat-icon"><i class="fas fa-users"></i></div>
+                            <div class="stat-content">
+                                <h3 id="totalParents">0</h3>
+                                <p>Total Parents</p>
+                            </div>
+                        </div>
+                        <div class="stat-card success">
+                            <div class="stat-icon"><i class="fas fa-phone"></i></div>
+                            <div class="stat-content">
+                                <h3 id="verifiedParents">0</h3>
+                                <p>Verified Contacts</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-users"></i> Parents/Guardians Management</h3>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Add Parent
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Father Name</th>
+                                        <th>Mother Name</th>
+                                        <th>Phone</th>
+                                        <th>Alt. Phone</th>
+                                        <th>Email</th>
+                                        <th>Occupation</th>
+                                        <th>Student</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="parentsTable">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Non-Teaching Staff Page -->
+                <div id="nonteachingPage" style="display: none;">
+                    <div class="stats-grid">
+                        <div class="stat-card primary">
+                            <div class="stat-icon"><i class="fas fa-user-tie"></i></div>
+                            <div class="stat-content">
+                                <h3 id="totalNonTeaching">0</h3>
+                                <p>Non-Teaching Staff</p>
+                            </div>
+                        </div>
+                        <div class="stat-card success">
+                            <div class="stat-icon"><i class="fas fa-money-bill"></i></div>
+                            <div class="stat-content">
+                                <h3 id="totalSalary">0</h3>
+                                <p>Monthly Salary</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-user-tie"></i> Non-Teaching Staff Management</h3>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Add Staff
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Staff No</th>
+                                        <th>Name</th>
+                                        <th>Gender</th>
+                                        <th>Position</th>
+                                        <th>Department</th>
+                                        <th>Phone</th>
+                                        <th>Salary</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="nonTeachingTable">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visitors/Outsiders Page -->
+                <div id="visitorsPage" style="display: none;">
+                    <div class="stats-grid">
+                        <div class="stat-card warning">
+                            <div class="stat-icon"><i class="fas fa-walking"></i></div>
+                            <div class="stat-content">
+                                <h3 id="totalVisitors">0</h3>
+                                <p>Total Visitors</p>
+                            </div>
+                        </div>
+                        <div class="stat-card danger">
+                            <div class="stat-icon"><i class="fas fa-user-clock"></i></div>
+                            <div class="stat-content">
+                                <h3 id="checkedIn">0</h3>
+                                <p>Currently Inside</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-walking"></i> Visitors/Outsiders Log</h3>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Register Visitor
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Visitor ID</th>
+                                        <th>Name</th>
+                                        <th>Phone</th>
+                                        <th>Purpose</th>
+                                        <th>Host</th>
+                                        <th>Date</th>
+                                        <th>Time In</th>
+                                        <th>Time Out</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="visitorsTable">
                                 </tbody>
                             </table>
                         </div>
