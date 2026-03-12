@@ -150,10 +150,13 @@ const Database = {
 
                 // Settings
                 settings: {
-                    schoolName: "St. John's Technical Institute",
-                    schoolAddress: 'Industrial Zone, Ghana',
+                    schoolName: "Suhum Senior High Technical School",
+                    schoolAddress: 'Suhum, Eastern Region',
+                    town: 'Suhum',
+                    region: 'Eastern Region',
+                    country: 'Ghana',
                     schoolPhone: '0302-123-456',
-                    schoolEmail: 'info@stjohnstech.edu.gh',
+                    schoolEmail: 'info@suhumsrhs.edu.gh',
                     academicYear: '2025-2026',
                     term: 'Term 2'
                 }
