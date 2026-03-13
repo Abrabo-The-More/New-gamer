@@ -48,7 +48,167 @@ function loadAllTables() {
     loadParentsTable();
     loadNonTeachingTable();
     loadVisitorsTable();
+    loadProgramsTable();
+    loadDepartmentsTable();
+    loadCommitteesTable();
+    loadDisciplinaryTable();
+    loadPTATable();
+    loadAdminCouncilTable();
+    loadSRCTable();
+    loadAcademicBoardTable();
     loadAnnouncementsFull();
+}
+
+// Load Programs Table
+function loadProgramsTable() {
+    const programs = Database.getTable('programs');
+    const tbody = document.getElementById('programsTable');
+    if (!tbody) return;
+    
+    tbody.innerHTML = programs.map(p => `
+        <tr>
+            <td><strong>${p.code}</strong></td>
+            <td>${p.name}</td>
+            <td><span class="badge badge-info">${p.category}</span></td>
+            <td>${p.description}</td>
+            <td>${p.duration}</td>
+            <td>${p.capacity}</td>
+            <td><span class="badge badge-success">${p.status}</span></td>
+            <td class="actions">
+                <button class="btn-icon"><i class="fas fa-eye"></i></button>
+                <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                <button class="btn-icon danger"><i class="fas fa-trash"></i></button>
+            </td>
+        </tr>
+    `).join('');
+    
+    document.getElementById('totalPrograms').textContent = programs.length;
+}
+
+// Load Departments Table
+function loadDepartmentsTable() {
+    const departments = Database.getTable('departments');
+    const teachers = Database.getTable('teachers');
+    const tbody = document.getElementById('departmentsTable');
+    if (!tbody) return;
+    
+    tbody.innerHTML = departments.map(d => {
+        const head = teachers.find(t => t.id === d.headId);
+        return `
+            <tr>
+                <td><strong>${d.code}</strong></td>
+                <td>${d.name}</td>
+                <td>${head ? head.firstName + ' ' + head.lastName : 'N/A'}</td>
+                <td>${d.description}</td>
+                <td class="actions">
+                    <button class="btn-icon"><i class="fas fa-eye"></i></button>
+                    <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                    <button class="btn-icon danger"><i class="fas fa-trash"></i></button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// Load Committees Table
+function loadCommitteesTable() {
+    const committees = Database.getTable('committees');
+    const tbody = document.getElementById('committeesTable');
+    if (!tbody) return;
+    
+    tbody.innerHTML = committees.map(c => `
+        <tr>
+            <td><strong>${c.name}</strong></td>
+            <td><span class="badge badge-info">${c.type}</span></td>
+            <td>${c.description}</td>
+            <td>${c.members}</td>
+            <td>${c.meetingDay}</td>
+            <td><span class="badge badge-success">${c.status}</span></td>
+            <td class="actions">
+                <button class="btn-icon"><i class="fas fa-eye"></i></button>
+                <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                <button class="btn-icon danger"><i class="fas fa-trash"></i></button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// Load Disciplinary Committee
+function loadDisciplinaryTable() {
+    const members = Database.getTable('committeeMembers').filter(m => m.committeeId === 1);
+    const tbody = document.getElementById('disciplinaryTable');
+    if (!tbody) return;
+    
+    tbody.innerHTML = members.map(m => `
+        <tr>
+            <td>${m.memberName}</td>
+            <td>${m.role}</td>
+            <td>${m.position}</td>
+        </tr>
+    `).join('');
+}
+
+// Load PTA
+function loadPTATable() {
+    const members = Database.getTable('committeeMembers').filter(m => m.committeeId === 2);
+    const tbody = document.getElementById('ptaTable');
+    if (!tbody) return;
+    
+    tbody.innerHTML = members.map(m => `
+        <tr>
+            <td>${m.memberName}</td>
+            <td>${m.role}</td>
+            <td>${m.position}</td>
+        </tr>
+    `).join('');
+}
+
+// Load Admin Council
+function loadAdminCouncilTable() {
+    const members = Database.getTable('committeeMembers').filter(m => m.committeeId === 3);
+    const tbody = document.getElementById('adminCouncilTable');
+    if (!tbody) return;
+    
+    tbody.innerHTML = members.map(m => `
+        <tr>
+            <td>${m.memberName}</td>
+            <td>${m.role}</td>
+            <td>${m.position}</td>
+        </tr>
+    `).join('');
+}
+
+// Load SRC
+function loadSRCTable() {
+    const src = Database.getTable('srcExecutive');
+    const tbody = document.getElementById('srcTable');
+    if (!tbody) return;
+    
+    tbody.innerHTML = src.map(s => `
+        <tr>
+            <td>${s.name}</td>
+            <td><span class="badge badge-primary">${s.position}</span></td>
+            <td>${s.class}</td>
+            <td>${s.phone}</td>
+            <td>${s.email}</td>
+            <td><span class="badge badge-success">${s.status}</span></td>
+        </tr>
+    `).join('');
+}
+
+// Load Academic Board
+function loadAcademicBoardTable() {
+    const members = Database.getTable('committeeMembers').filter(m => m.committeeId === 5);
+    const tbody = document.getElementById('academicBoardTable');
+    if (!tbody) return;
+    
+    tbody.innerHTML = members.map(m => `
+        <tr>
+            <td>${m.memberName}</td>
+            <td>${m.role}</td>
+            <td>${m.position}</td>
+        </tr>
+    `).join('');
 }
 
 // Load students table
@@ -323,8 +483,9 @@ function setupNavigation() {
 // Navigate to page
 function navigateTo(page) {
     // Hide all pages
-    const pages = ['dashboardPage', 'studentsPage', 'teachersPage', 'nonteachingPage', 'parentsPage', 'visitorsPage', 'classesPage', 
-                  'subjectsPage', 'attendancePage', 'gradesPage', 'feesPage', 
+    const pages = ['dashboardPage', 'studentsPage', 'teachersPage', 'nonteachingPage', 'parentsPage', 'visitorsPage', 'programsPage', 'classesPage', 
+                  'subjectsPage', 'departmentsPage', 'committeesPage', 'disciplinaryPage', 'ptaPage', 'admincouncilPage', 'srcPage', 'academicboardPage',
+                  'attendancePage', 'gradesPage', 'feesPage', 
                   'admissionsPage', 'staffPage', 'libraryPage', 'inventoryPage',
                   'announcementsPage', 'messagesPage', 'reportsPage', 'settingsPage',
                   'timetablePage', 'defaultPage'];
@@ -342,8 +503,16 @@ function navigateTo(page) {
         nonteaching: 'Non-Teaching Staff',
         parents: 'Parents/Guardians',
         visitors: 'Visitors/Outsiders',
+        programs: 'Programs/Courses',
         classes: 'Classes',
         subjects: 'Subjects',
+        departments: 'Departments',
+        committees: 'Committees',
+        disciplinary: 'Disciplinary Committee',
+        pta: 'PTA',
+        admincouncil: 'Admin Council',
+        src: 'SRC',
+        academicboard: 'Academic Board',
         attendance: 'Attendance',
         grades: 'Grades',
         fees: 'Fees',

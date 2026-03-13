@@ -182,8 +182,98 @@ const Database = {
                     schoolPhone: '0302-123-456',
                     schoolEmail: 'info@suhumsrhs.edu.gh',
                     academicYear: '2025-2026',
-                    term: 'Term 2'
-                }
+                    term: 'Term 2',
+                    motto: "Technical & Vocational Excellence",
+                    crest: "images/school-icon.svg"
+                },
+
+                // Academic Programs/Courses
+                programs: [
+                    { id: 1, name: 'General Science', code: 'GENSCI', category: 'Science', description: 'Science students with Biology, Chemistry, Physics', duration: '3 years', capacity: 150, status: 'Active' },
+                    { id: 2, name: 'General Arts', code: 'GENART', category: 'Arts', description: 'Arts students with Literature, History, Economics', duration: '3 years', capacity: 120, status: 'Active' },
+                    { id: 3, name: 'Visual Arts', code: 'VISART', category: 'Arts', description: 'Art students with Painting, Sculpture, Graphic Design', duration: '3 years', capacity: 80, status: 'Active' },
+                    { id: 4, name: 'Business', code: 'BUS', category: 'Business', description: 'Business students with Accounting, Economics, Management', duration: '3 years', capacity: 100, status: 'Active' },
+                    { id: 5, name: 'Technical', code: 'TECH', category: 'Technical', description: 'Technical students with Electrical, Mechanical, Building', duration: '3 years', capacity: 120, status: 'Active' }
+                ],
+
+                // Committees
+                committees: [
+                    { id: 1, name: 'Disciplinary Committee', type: 'Disciplinary', description: 'Handles student discipline and behavioral issues', members: 'Principal, Housemasters, Senior Teachers', meetingDay: 'Monday', status: 'Active' },
+                    { id: 2, name: 'Parent-Teacher Association (PTA)', type: 'PTA', description: 'Bridge between parents and school management', members: 'Parents, Teachers, Principal', meetingDay: 'Friday', status: 'Active' },
+                    { id: 3, name: 'Administration Council', type: 'Administration', description: 'Top management decision making body', members: 'Principal, Vice Principals, Headmasters, Senior Staff', meetingDay: 'Wednesday', status: 'Active' },
+                    { id: 4, name: 'SRC (Student Representative Council)', type: 'Student', description: 'Student leadership body', members: 'President, Vice President, Class Representatives', meetingDay: 'Tuesday', status: 'Active' },
+                    { id: 5, name: 'Academic Board', type: 'Academic', description: 'Curriculum and academic decisions', members: 'Principal, HODs, Senior Teachers', meetingDay: 'Thursday', status: 'Active' },
+                    { id: 6, name: 'Health & Safety Committee', type: 'Health', description: 'School health and safety matters', members: 'Nurse, Security, Caterer, Admin', meetingDay: 'Monday', status: 'Active' },
+                    { id: 7, name: 'Sports Committee', type: 'Sports', description: 'Sports and physical activities', members: 'PE Teacher, Sports Master, Captains', meetingDay: 'Saturday', status: 'Active' },
+                    { id: 8, name: 'Exam Board', type: 'Academic', description: 'Examination and assessment matters', members: 'Principal, Exam Officer, HODs', meetingDay: 'As Needed', status: 'Active' }
+                ],
+
+                // Committee Members
+                committeeMembers: [
+                    { id: 1, committeeId: 1, memberName: 'Dr. John Smith', role: 'Chairman', position: 'Principal' },
+                    { id: 2, committeeId: 1, memberName: 'Mr. David Mensah', role: 'Secretary', position: 'HOD Science' },
+                    { id: 3, committeeId: 2, memberName: 'Mr. John Asante', role: 'President', position: 'Parent' },
+                    { id: 4, committeeId: 2, memberName: 'Mr. David Mensah', role: 'Secretary', position: 'Teacher' },
+                    { id: 5, committeeId: 3, memberName: 'Dr. John Smith', role: 'Chairman', position: 'Principal' },
+                    { id: 6, committeeId: 3, memberName: 'Mrs. Grace Osei', role: 'Vice Chairman', position: 'Vice Principal' },
+                    { id: 7, committeeId: 4, memberName: 'Kwame Asante', role: 'President', position: 'Student' },
+                    { id: 8, committeeId: 4, memberName: 'Akua Mensah', role: 'Vice President', position: 'Student' }
+                ],
+
+                // SRC Executives
+                srcExecutive: [
+                    { id: 1, name: 'Kwame Asante', position: 'President', class: 'Form 3 Technical', phone: '0244123456', email: 'kwame@student.edu', status: 'Active' },
+                    { id: 2, name: 'Akua Mensah', position: 'Vice President', class: 'Form 3 General Science', phone: '0245789012', email: 'akua@student.edu', status: 'Active' },
+                    { id: 3, name: 'Kofi Osei', position: 'Secretary', class: 'Form 3 Business', phone: '0245345678', email: 'kofi@student.edu', status: 'Active' },
+                    { id: 4, name: 'Abena Serwaa', position: 'Treasurer', class: 'Form 3 Visual Arts', phone: '0245567890', email: 'abena@student.edu', status: 'Active' }
+                ],
+
+                // Classes with Programs
+                classes: [
+                    { id: 1, name: 'Form 1', stream: 'A', programId: 1, section: 'General Science', capacity: 40, classTeacherId: 1, room: 'Lab 1' },
+                    { id: 2, name: 'Form 1', stream: 'B', programId: 2, section: 'General Arts', capacity: 40, classTeacherId: 4, room: 'Rm 101' },
+                    { id: 3, name: 'Form 1', stream: 'C', programId: 3, section: 'Visual Arts', capacity: 30, classTeacherId: 2, room: 'Art Room' },
+                    { id: 4, name: 'Form 1', stream: 'D', programId: 4, section: 'Business', capacity: 35, classTeacherId: 3, room: 'Rm 102' },
+                    { id: 5, name: 'Form 1', stream: 'E', programId: 5, section: 'Technical', capacity: 35, classTeacherId: 5, room: 'Tech 1' },
+                    { id: 6, name: 'Form 2', stream: 'A', programId: 1, section: 'General Science', capacity: 40, classTeacherId: 1, room: 'Lab 2' },
+                    { id: 7, name: 'Form 2', stream: 'B', programId: 2, section: 'General Arts', capacity: 40, classTeacherId: 4, room: 'Rm 201' },
+                    { id: 8, name: 'Form 2', stream: 'C', programId: 5, section: 'Technical', capacity: 35, classTeacherId: 5, room: 'Tech 2' },
+                    { id: 9, name: 'Form 3', stream: 'A', programId: 1, section: 'General Science', capacity: 40, classTeacherId: 2, room: 'Lab 3' },
+                    { id: 10, name: 'Form 3', stream: 'B', programId: 4, section: 'Business', capacity: 35, classTeacherId: 3, room: 'Rm 301' }
+                ],
+
+                // Subjects by Program
+                subjects: [
+                    // General Science
+                    { id: 1, name: 'Mathematics', code: 'MTH001', category: 'Core', department: 'Science', programId: 1, teacherId: 1, credits: 4 },
+                    { id: 2, name: 'English', code: 'ENG001', category: 'Core', department: 'Languages', programId: null, teacherId: 4, credits: 4 },
+                    { id: 3, name: 'Physics', code: 'PHY001', category: 'Science', department: 'Science', programId: 1, teacherId: 2, credits: 4 },
+                    { id: 4, name: 'Chemistry', code: 'CHEM001', category: 'Science', department: 'Science', programId: 1, teacherId: 2, credits: 4 },
+                    { id: 5, name: 'Biology', code: 'BIO001', category: 'Science', department: 'Science', programId: 1, teacherId: 1, credits: 4 },
+                    // General Arts
+                    { id: 6, name: 'Literature', code: 'LIT001', category: 'Arts', department: 'Arts', programId: 2, teacherId: 4, credits: 4 },
+                    { id: 7, name: 'History', code: 'HIS001', category: 'Arts', department: 'Arts', programId: 2, teacherId: 4, credits: 3 },
+                    { id: 8, name: 'Economics', code: 'ECO001', category: 'Arts', department: 'Business', programId: 2, teacherId: 3, credits: 3 },
+                    // Visual Arts
+                    { id: 9, name: 'Painting', code: 'ART001', category: 'Visual', department: 'Arts', programId: 3, teacherId: 4, credits: 4 },
+                    { id: 10, name: 'Graphic Design', code: 'GDS001', category: 'Visual', department: 'Arts', programId: 3, teacherId: 4, credits: 4 },
+                    // Business
+                    { id: 11, name: 'Accounting', code: 'ACC001', category: 'Business', department: 'Business', programId: 4, teacherId: 3, credits: 4 },
+                    { id: 12, name: 'Business Management', code: 'BM001', category: 'Business', department: 'Business', programId: 4, teacherId: 3, credits: 3 },
+                    // Technical
+                    { id: 13, name: 'Technical Drawing', code: 'TD001', category: 'Technical', department: 'Technical', programId: 5, teacherId: 5, credits: 4 },
+                    { id: 14, name: 'Automotive', code: 'AUT001', category: 'Technical', department: 'Technical', programId: 5, teacherId: 5, credits: 4 },
+                    { id: 15, name: 'Electrical', code: 'ELE001', category: 'Technical', department: 'Technical', programId: 5, teacherId: 5, credits: 4 }
+                ],
+
+                // Departments
+                departments: [
+                    { id: 1, name: 'Science', headId: 1, code: 'SCI', description: 'Science Department' },
+                    { id: 2, name: 'Languages', headId: 4, code: 'LANG', description: 'Languages Department' },
+                    { id: 3, name: 'Business', headId: 3, code: 'BUS', description: 'Business Department' },
+                    { id: 4, name: 'Arts', headId: 4, code: 'ART', description: 'Arts and Visual Arts' },
+                    { id: 5, name: 'Technical', headId: 5, code: 'TECH', description: 'Technical and Vocational' }
+                ],
             };
             localStorage.setItem('schoolDB', JSON.stringify(initialData));
         }

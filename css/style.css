@@ -1011,3 +1011,29 @@ h6 { font-size: 1rem; }
 .align-center { align-items: center; }
 .gap-1 { gap: 10px; }
 .gap-2 { gap: 20px; }
+
+/* Info Box Style */
+.info-box {
+    background: linear-gradient(135deg, #e8f4fd 0%, #f0f9ff 100%);
+    border-left: 4px solid var(--primary-color);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+}
+
+.info-box h4 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.info-box p {
+    margin-bottom: 8px;
+    color: var(--gray-700);
+}
+
+.info-box strong {
+    color: var(--primary-color);
+}
