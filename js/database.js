@@ -9,41 +9,35 @@ const Database = {
     init() {
         if (!localStorage.getItem('schoolDB')) {
             const initialData = {
-                // Users for Login
+                // Users for Login - Each user has unique secret code for their own dashboard
                 users: [
                     // Admin
-                    { id: 1, username: 'admin', password: 'admin123', code: 'admin2026', role: 'admin', name: 'Administrator', email: 'admin@school.edu' },
+                    { id: 1, username: 'admin', password: 'admin123', code: 'ADMIN001', role: 'admin', name: 'Administrator', email: 'admin@school.edu' },
                     // Principal
-                    { id: 2, username: 'principal', password: 'principal123', code: 'principal2026', role: 'principal', name: 'Dr. John Smith', email: 'principal@school.edu' },
-                    // Teaching Staff
-                    { id: 3, username: 'teacher', password: 'teacher123', code: 'teacher2026', role: 'teacher', name: 'Mr. David Mensah', email: 'teacher@school.edu' },
-                    { id: 4, username: 'david.mensah', password: 'david123', code: 'david2026', role: 'teacher', name: 'Mr. David Mensah', email: 'david.mensah@school.edu' },
-                    { id: 5, username: 'grace.osei', password: 'grace123', code: 'grace2026', role: 'teacher', name: 'Mrs. Grace Osei', email: 'grace.osei@school.edu' },
-                    // Non-Teaching Staff
-                    { id: 6, username: 'accountant', password: 'accountant123', code: 'account2026', role: 'accountant', name: 'Mrs. Sarah Osei', email: 'accountant@school.edu' },
-                    { id: 7, username: 'registrar', password: 'registrar123', code: 'registrar2026', role: 'registrar', name: 'Mr. James Kofi', email: 'registrar@school.edu' },
-                    { id: 8, username: 'librarian', password: 'librarian123', code: 'librarian2026', role: 'librarian', name: 'Mrs. Mary Akosua', email: 'librarian@school.edu' },
-                    { id: 9, username: 'storekeeper', password: 'storekeeper123', code: 'store2026', role: 'storekeeper', name: 'Mr. Robert Doe', email: 'storekeeper@school.edu' },
-                    // Security
-                    { id: 10, username: 'security', password: 'security123', code: 'security2026', role: 'security', name: 'Mr. Michael Tetteh', email: 'security@school.edu' },
-                    // Caterer
-                    { id: 11, username: 'caterer', password: 'caterer123', code: 'caterer2026', role: 'caterer', name: 'Mrs. Grace Adom', email: 'caterer@school.edu' },
-                    // Nurse
-                    { id: 12, username: 'nurse', password: 'nurse123', code: 'nurse2026', role: 'nurse', name: 'Mrs. Mary Akosua', email: 'nurse@school.edu' },
-                    // Secretary
-                    { id: 13, username: 'secretary', password: 'secretary123', code: 'secret2026', role: 'secretary', name: 'Mrs. Anna Mensah', email: 'secretary@school.edu' },
-                    // Parents
-                    { id: 14, username: 'parent', password: 'parent123', code: 'parent2026', role: 'parent', name: 'Mr. John Asante', email: 'parent@school.edu' },
-                    { id: 15, username: 'j.asante', password: 'asante123', code: 'asante2026', role: 'parent', name: 'Mr. John Asante', email: 'john.asante@email.com' },
-                    { id: 16, username: 'p.mensah', password: 'mensah123', code: 'paul2026', role: 'parent', name: 'Mr. Paul Mensah', email: 'paul.mensah@email.com' },
-                    // Students
-                    { id: 17, username: 'student', password: 'student123', code: 'student2026', role: 'student', name: 'John Doe', email: 'student@school.edu' },
-                    { id: 18, username: 'kwame.asante', password: 'kwame123', code: 'kwame2026', role: 'student', name: 'Kwame Asante', email: 'kwame.asante@student.edu', studentId: 1 },
-                    { id: 19, username: 'akua.mensah', password: 'akua123', code: 'akua2026', role: 'student', name: 'Akua Mensah', email: 'akua.mensah@student.edu', studentId: 2 },
-                    { id: 20, username: 'kofi.osei', password: 'kofi123', code: 'kofi2026', role: 'student', name: 'Kofi Osei', email: 'kofi.osei@student.edu', studentId: 3 },
-                    // Visitors/Outsiders
-                    { id: 21, username: 'visitor', password: 'visitor123', code: 'visitor2026', role: 'visitor', name: 'Visitor Account', email: 'visitor@school.edu' },
-                    { id: 22, username: 'henry.ford', password: 'henry123', code: 'henry2026', role: 'visitor', name: 'Mr. Henry Ford', email: 'henry@email.com' }
+                    { id: 2, username: 'principal', password: 'principal123', code: 'PRIN001', role: 'principal', name: 'Dr. John Smith', email: 'principal@school.edu' },
+                    // Teaching Staff - Each has unique code
+                    { id: 3, username: 'teacher', password: 'teacher123', code: 'TEAC001', role: 'teacher', name: 'Mr. David Mensah', email: 'teacher@school.edu' },
+                    { id: 4, username: 'david.mensah', password: 'david123', code: 'TEAC002', role: 'teacher', name: 'Mr. David Mensah', email: 'david.mensah@school.edu' },
+                    { id: 5, username: 'grace.osei', password: 'grace123', code: 'TEAC003', role: 'teacher', name: 'Mrs. Grace Osei', email: 'grace.osei@school.edu' },
+                    // Non-Teaching Staff - Each has unique code
+                    { id: 6, username: 'accountant', password: 'accountant123', code: 'ACCT001', role: 'accountant', name: 'Mrs. Sarah Osei', email: 'accountant@school.edu' },
+                    { id: 7, username: 'registrar', password: 'registrar123', code: 'REGI001', role: 'registrar', name: 'Mr. James Kofi', email: 'registrar@school.edu' },
+                    { id: 8, username: 'librarian', password: 'librarian123', code: 'LIB001', role: 'librarian', name: 'Mrs. Mary Akosua', email: 'librarian@school.edu' },
+                    { id: 9, username: 'storekeeper', password: 'storekeeper123', code: 'STOR001', role: 'storekeeper', name: 'Mr. Robert Doe', email: 'storekeeper@school.edu' },
+                    { id: 10, username: 'security', password: 'security123', code: 'SECU001', role: 'security', name: 'Mr. Michael Tetteh', email: 'security@school.edu' },
+                    { id: 11, username: 'caterer', password: 'caterer123', code: 'CATE001', role: 'caterer', name: 'Mrs. Grace Adom', email: 'caterer@school.edu' },
+                    { id: 12, username: 'nurse', password: 'nurse123', code: 'NURS001', role: 'nurse', name: 'Mrs. Mary Akosua', email: 'nurse@school.edu' },
+                    { id: 13, username: 'secretary', password: 'secretary123', code: 'SECR001', role: 'secretary', name: 'Mrs. Anna Mensah', email: 'secretary@school.edu' },
+                    // Parents - Each has unique code
+                    { id: 14, username: 'parent', password: 'parent123', code: 'PAR001', role: 'parent', name: 'Mr. John Asante', email: 'parent@school.edu', parentId: 1 },
+                    { id: 15, username: 'j.asante', password: 'asante123', code: 'PAR002', role: 'parent', name: 'Mr. John Asante', email: 'john.asante@email.com', parentId: 1 },
+                    { id: 16, username: 'p.mensah', password: 'mensah123', code: 'PAR003', role: 'parent', name: 'Mr. Paul Mensah', email: 'paul.mensah@email.com', parentId: 2 },
+                    // Students - Each has unique code for their own results
+                    { id: 17, username: 'student', password: 'student123', code: 'STUD001', role: 'student', name: 'John Doe', email: 'student@school.edu', studentId: 1 },
+                    { id: 18, username: 'kwame.asante', password: 'kwame123', code: 'STUD002', role: 'student', name: 'Kwame Asante', email: 'kwame.asante@student.edu', studentId: 1 },
+                    { id: 19, username: 'akua.mensah', password: 'akua123', code: 'STUD003', role: 'student', name: 'Akua Mensah', email: 'akua.mensah@student.edu', studentId: 2 },
+                    { id: 20, username: 'kofi.osei', password: 'kofi123', code: 'STUD004', role: 'student', name: 'Kofi Osei', email: 'kofi.osei@student.edu', studentId: 3 },
+                    { id: 21, username: 'abena.serwaa', password: 'abena123', code: 'STUD005', role: 'student', name: 'Abena Serwaa', email: 'abena.serwaa@student.edu', studentId: 4 }
                 ],
 
                 // Students Data
