@@ -108,7 +108,10 @@ if (document.getElementById('loginForm')) {
 
 // Initialize on dashboard load
 document.addEventListener('DOMContentLoaded', () => {
-    if (checkAuth()) {
-        updateUserInfo();
+    // Only check auth if we're on the dashboard page
+    if (window.location.href.includes('dashboard.html')) {
+        if (checkAuth()) {
+            updateUserInfo();
+        }
     }
 });
