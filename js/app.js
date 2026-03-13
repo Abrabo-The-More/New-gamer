@@ -14,6 +14,9 @@ document.addEventListener('DOMContentLoaded', function() {
     updateUserInfo();
     
     // Load dashboard data
+
+// Initialize role-based dashboard
+    initDashboard();
     loadDashboardData();
     
     // Setup navigation

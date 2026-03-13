@@ -49,8 +49,16 @@ function login(event) {
         sessionStorage.setItem('userRole', user.role);
         sessionStorage.setItem('userEmail', user.email);
         
-        // Redirect to dashboard
-        window.location.href = 'dashboard.html';
+        // Store student/parent linked ID
+        if (user.studentId) {
+            sessionStorage.setItem('studentId', user.studentId);
+        }
+        if (user.parentId) {
+            sessionStorage.setItem('parentId', user.parentId);
+        }
+        
+        // Redirect based on role
+        window.location.href = 'dashboard.html?role=' + user.role;
     } else {
         // Show error
         errorDiv.classList.add('show');
