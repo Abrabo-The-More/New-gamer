@@ -4,535 +4,172 @@
  */
 
 // Initialize app
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     // Check authentication
     if (!checkAuth()) {
         return;
     }
     
-    // Load user info
-    updateUserInfo();
+    // Initialize database
+    await SchoolDB.open();
     
-    // Load dashboard data
-
-// Initialize role-based dashboard
+    // Initialize role-based dashboard
     initDashboard();
-    loadDashboardData();
     
-    // Setup navigation
+    // Setup navigation click handlers
     setupNavigation();
     
     // Load all tables
     loadAllTables();
 });
 
-// Load dashboard statistics
-function loadDashboardData() {
-    const stats = Database.getStats();
-    
-    document.getElementById('totalStudents').textContent = stats.totalStudents;
-    document.getElementById('totalTeachers').textContent = stats.totalTeachers;
-    document.getElementById('totalNonTeaching').textContent = stats.totalNonTeachingStaff;
-    document.getElementById('totalClasses').textContent = stats.totalClasses;
-    document.getElementById('unpaidFees').textContent = stats.unpaidFees;
-    document.getElementById('paidFees').textContent = stats.paidFees;
-    document.getElementById('feesUnpaid').textContent = stats.unpaidFees;
-    
-    // Load announcements
-    loadAnnouncements();
-}
-
-// Load all data tables
-function loadAllTables() {
-    loadStudentsTable();
-    loadTeachersTable();
-    loadFeesTable();
-    loadStaffTable();
-    loadParentsTable();
-    loadNonTeachingTable();
-    loadVisitorsTable();
-    loadProgramsTable();
-    loadDepartmentsTable();
-    loadCommitteesTable();
-    loadDisciplinaryTable();
-    loadPTATable();
-    loadAdminCouncilTable();
-    loadSRCTable();
-    loadAcademicBoardTable();
-    loadAnnouncementsFull();
-}
-
-// Load Programs Table
-function loadProgramsTable() {
-    const programs = Database.getTable('programs');
-    const tbody = document.getElementById('programsTable');
-    if (!tbody) return;
-    
-    tbody.innerHTML = programs.map(p => `
-        <tr>
-            <td><strong>${p.code}</strong></td>
-            <td>${p.name}</td>
-            <td><span class="badge badge-info">${p.category}</span></td>
-            <td>${p.description}</td>
-            <td>${p.duration}</td>
-            <td>${p.capacity}</td>
-            <td><span class="badge badge-success">${p.status}</span></td>
-            <td class="actions">
-                <button class="btn-icon"><i class="fas fa-eye"></i></button>
-                <button class="btn-icon"><i class="fas fa-edit"></i></button>
-                <button class="btn-icon danger"><i class="fas fa-trash"></i></button>
-            </td>
-        </tr>
-    `).join('');
-    
-    document.getElementById('totalPrograms').textContent = programs.length;
-}
-
-// Load Departments Table
-function loadDepartmentsTable() {
-    const departments = Database.getTable('departments');
-    const teachers = Database.getTable('teachers');
-    const tbody = document.getElementById('departmentsTable');
-    if (!tbody) return;
-    
-    tbody.innerHTML = departments.map(d => {
-        const head = teachers.find(t => t.id === d.headId);
-        return `
-            <tr>
-                <td><strong>${d.code}</strong></td>
-                <td>${d.name}</td>
-                <td>${head ? head.firstName + ' ' + head.lastName : 'N/A'}</td>
-                <td>${d.description}</td>
-                <td class="actions">
-                    <button class="btn-icon"><i class="fas fa-eye"></i></button>
-                    <button class="btn-icon"><i class="fas fa-edit"></i></button>
-                    <button class="btn-icon danger"><i class="fas fa-trash"></i></button>
-                </td>
-            </tr>
-        `;
-    }).join('');
-}
-
-// Load Committees Table
-function loadCommitteesTable() {
-    const committees = Database.getTable('committees');
-    const tbody = document.getElementById('committeesTable');
-    if (!tbody) return;
-    
-    tbody.innerHTML = committees.map(c => `
-        <tr>
-            <td><strong>${c.name}</strong></td>
-            <td><span class="badge badge-info">${c.type}</span></td>
-            <td>${c.description}</td>
-            <td>${c.members}</td>
-            <td>${c.meetingDay}</td>
-            <td><span class="badge badge-success">${c.status}</span></td>
-            <td class="actions">
-                <button class="btn-icon"><i class="fas fa-eye"></i></button>
-                <button class="btn-icon"><i class="fas fa-edit"></i></button>
-                <button class="btn-icon danger"><i class="fas fa-trash"></i></button>
-            </td>
-        </tr>
-    `).join('');
-}
-
-// Load Disciplinary Committee
-function loadDisciplinaryTable() {
-    const members = Database.getTable('committeeMembers').filter(m => m.committeeId === 1);
-    const tbody = document.getElementById('disciplinaryTable');
-    if (!tbody) return;
-    
-    tbody.innerHTML = members.map(m => `
-        <tr>
-            <td>${m.memberName}</td>
-            <td>${m.role}</td>
-            <td>${m.position}</td>
-        </tr>
-    `).join('');
-}
-
-// Load PTA
-function loadPTATable() {
-    const members = Database.getTable('committeeMembers').filter(m => m.committeeId === 2);
-    const tbody = document.getElementById('ptaTable');
-    if (!tbody) return;
-    
-    tbody.innerHTML = members.map(m => `
-        <tr>
-            <td>${m.memberName}</td>
-            <td>${m.role}</td>
-            <td>${m.position}</td>
-        </tr>
-    `).join('');
-}
-
-// Load Admin Council
-function loadAdminCouncilTable() {
-    const members = Database.getTable('committeeMembers').filter(m => m.committeeId === 3);
-    const tbody = document.getElementById('adminCouncilTable');
-    if (!tbody) return;
-    
-    tbody.innerHTML = members.map(m => `
-        <tr>
-            <td>${m.memberName}</td>
-            <td>${m.role}</td>
-            <td>${m.position}</td>
-        </tr>
-    `).join('');
-}
-
-// Load SRC
-function loadSRCTable() {
-    const src = Database.getTable('srcExecutive');
-    const tbody = document.getElementById('srcTable');
-    if (!tbody) return;
-    
-    tbody.innerHTML = src.map(s => `
-        <tr>
-            <td>${s.name}</td>
-            <td><span class="badge badge-primary">${s.position}</span></td>
-            <td>${s.class}</td>
-            <td>${s.phone}</td>
-            <td>${s.email}</td>
-            <td><span class="badge badge-success">${s.status}</span></td>
-        </tr>
-    `).join('');
-}
-
-// Load Academic Board
-function loadAcademicBoardTable() {
-    const members = Database.getTable('committeeMembers').filter(m => m.committeeId === 5);
-    const tbody = document.getElementById('academicBoardTable');
-    if (!tbody) return;
-    
-    tbody.innerHTML = members.map(m => `
-        <tr>
-            <td>${m.memberName}</td>
-            <td>${m.role}</td>
-            <td>${m.position}</td>
-        </tr>
-    `).join('');
-}
-
-// Load students table
-function loadStudentsTable() {
-    const students = Database.getTable('students');
-    const tbody = document.getElementById('studentsTable');
-    
-    if (!tbody) return;
-    
-    tbody.innerHTML = students.map(student => `
-        <tr>
-            <td>${student.admissionNo}</td>
-            <td>${student.firstName} ${student.lastName}</td>
-            <td>${student.gender}</td>
-            <td>Form ${student.classId}</td>
-            <td>${student.section}</td>
-            <td>${student.phone}</td>
-            <td><span class="badge badge-success">${student.status}</span></td>
-            <td class="actions">
-                <button class="btn-icon" title="View"><i class="fas fa-eye"></i></button>
-                <button class="btn-icon" title="Edit"><i class="fas fa-edit"></i></button>
-                <button class="btn-icon danger" title="Delete"><i class="fas fa-trash"></i></button>
-            </td>
-        </tr>
-    `).join('');
-}
-
-// Load parents table
-function loadParentsTable() {
-    const parents = Database.getTable('parents');
-    const students = Database.getTable('students');
-    const tbody = document.getElementById('parentsTable');
-    
-    if (!tbody) return;
-    
-    tbody.innerHTML = parents.map(parent => {
-        const student = students.find(s => s.id === parent.studentId);
-        return `
-            <tr>
-                <td>${parent.fatherName}</td>
-                <td>${parent.motherName}</td>
-                <td>${parent.phone}</td>
-                <td>${parent.altPhone || '-'}</td>
-                <td>${parent.email}</td>
-                <td>${parent.occupation}</td>
-                <td>${student ? student.firstName + ' ' + student.lastName : 'N/A'}</td>
-                <td class="actions">
-                    <button class="btn-icon"><i class="fas fa-eye"></i></button>
-                    <button class="btn-icon"><i class="fas fa-edit"></i></button>
-                    <button class="btn-icon danger"><i class="fas fa-trash"></i></button>
-                </td>
-            </tr>
-        `;
-    }).join('');
-    
-    // Update stats
-    document.getElementById('totalParents').textContent = parents.length;
-    document.getElementById('verifiedParents').textContent = parents.filter(p => p.phone).length;
-}
-
-// Load non-teaching staff table
-function loadNonTeachingTable() {
-    const staff = Database.getTable('nonTeachingStaff');
-    const tbody = document.getElementById('nonTeachingTable');
-    
-    if (!tbody) return;
-    
-    tbody.innerHTML = staff.map(s => `
-        <tr>
-            <td>${s.staffNo}</td>
-            <td>${s.firstName} ${s.lastName}</td>
-            <td>${s.gender}</td>
-            <td>${s.position}</td>
-            <td>${s.department}</td>
-            <td>${s.phone}</td>
-            <td>GH₵ ${s.salary}</td>
-            <td><span class="badge badge-success">${s.status}</span></td>
-            <td class="actions">
-                <button class="btn-icon"><i class="fas fa-eye"></i></button>
-                <button class="btn-icon"><i class="fas fa-edit"></i></button>
-                <button class="btn-icon danger"><i class="fas fa-trash"></i></button>
-            </td>
-        </tr>
-    `).join('');
-    
-    // Update stats
-    document.getElementById('totalNonTeaching').textContent = staff.length;
-    const totalSalary = staff.reduce((sum, s) => sum + s.salary, 0);
-    document.getElementById('totalSalary').textContent = 'GH₵ ' + totalSalary.toLocaleString();
-}
-
-// Load visitors table
-function loadVisitorsTable() {
-    const visitors = Database.getTable('visitors');
-    const tbody = document.getElementById('visitorsTable');
-    
-    if (!tbody) return;
-    
-    tbody.innerHTML = visitors.map(v => {
-        const statusClass = v.status === 'Checked In' ? 'warning' : 'success';
-        return `
-            <tr>
-                <td>${v.visitorId}</td>
-                <td>${v.name}</td>
-                <td>${v.phone}</td>
-                <td>${v.purpose}</td>
-                <td>${v.host}</td>
-                <td>${v.date}</td>
-                <td>${v.timeIn}</td>
-                <td>${v.timeOut || '-'}</td>
-                <td><span class="badge badge-${statusClass}">${v.status}</span></td>
-                <td class="actions">
-                    <button class="btn-icon"><i class="fas fa-eye"></i></button>
-                    <button class="btn-icon"><i class="fas fa-edit"></i></button>
-                    <button class="btn-icon danger"><i class="fas fa-trash"></i></button>
-                </td>
-            </tr>
-        `;
-    }).join('');
-    
-    // Update stats
-    document.getElementById('totalVisitors').textContent = visitors.length;
-    document.getElementById('checkedIn').textContent = visitors.filter(v => v.status === 'Checked In').length;
-}
-
-// Load teachers table
-function loadTeachersTable() {
-    const teachers = Database.getTable('teachers');
-    const tbody = document.getElementById('teachersTable');
-    
-    if (!tbody) return;
-    
-    tbody.innerHTML = teachers.map(teacher => `
-        <tr>
-            <td>${teacher.staffNo}</td>
-            <td>${teacher.firstName} ${teacher.lastName}</td>
-            <td>${teacher.qualification}</td>
-            <td>${teacher.subject}</td>
-            <td>${teacher.phone}</td>
-            <td>${teacher.hireDate}</td>
-            <td><span class="badge badge-success">${teacher.status}</span></td>
-            <td class="actions">
-                <button class="btn-icon"><i class="fas fa-eye"></i></button>
-                <button class="btn-icon"><i class="fas fa-edit"></i></button>
-                <button class="btn-icon danger"><i class="fas fa-trash"></i></button>
-            </td>
-        </tr>
-    `).join('');
-}
-
-// Load fees table
-function loadFeesTable() {
-    const fees = Database.getTable('fees');
-    const students = Database.getTable('students');
-    const tbody = document.getElementById('feesTable');
-    
-    if (!tbody) return;
-    
-    tbody.innerHTML = fees.map(fee => {
-        const student = students.find(s => s.id === fee.studentId);
-        const statusClass = fee.status === 'Paid' ? 'success' : 'danger';
-        
-        return `
-            <tr>
-                <td>${student ? student.firstName + ' ' + student.lastName : 'N/A'}</td>
-                <td>${fee.feeType}</td>
-                <td>GH₵ ${fee.amount}</td>
-                <td>${fee.dueDate}</td>
-                <td>${fee.paidDate || '-'}</td>
-                <td>${fee.receiptNo || '-'}</td>
-                <td><span class="badge badge-${statusClass}">${fee.status}</span></td>
-                <td class="actions">
-                    <button class="btn-icon"><i class="fas fa-eye"></i></button>
-                    <button class="btn-icon"><i class="fas fa-edit"></i></button>
-                </td>
-            </tr>
-        `;
-    }).join('');
-}
-
-// Load staff table
-function loadStaffTable() {
-    const staff = Database.getTable('staff');
-    const tbody = document.getElementById('staffTable');
-    
-    if (!tbody) return;
-    
-    tbody.innerHTML = staff.map(s => `
-        <tr>
-            <td>${s.staffNo}</td>
-            <td>${s.firstName} ${s.lastName}</td>
-            <td>${s.position}</td>
-            <td>${s.department}</td>
-            <td>${s.phone}</td>
-            <td>GH₵ ${s.salary}</td>
-            <td><span class="badge badge-success">${s.status}</span></td>
-            <td class="actions">
-                <button class="btn-icon"><i class="fas fa-eye"></i></button>
-                <button class="btn-icon"><i class="fas fa-edit"></i></button>
-                <button class="btn-icon danger"><i class="fas fa-trash"></i></button>
-            </td>
-        </tr>
-    `).join('');
-}
-
-// Load announcements
-function loadAnnouncements() {
-    const announcements = Database.getTable('announcements').slice(0, 3);
-    const tbody = document.getElementById('announcementsTable');
-    
-    if (!tbody) return;
-    
-    tbody.innerHTML = announcements.map(a => {
-        const priorityClass = a.priority === 'High' ? 'danger' : 'warning';
-        return `
-            <tr>
-                <td>${a.title}</td>
-                <td>${a.category}</td>
-                <td>${a.postedBy}</td>
-                <td>${a.date}</td>
-                <td><span class="badge badge-${priorityClass}">${a.priority}</span></td>
-            </tr>
-        `;
-    }).join('');
-}
-
-// Load announcements full
-function loadAnnouncementsFull() {
-    const announcements = Database.getTable('announcements');
-    const tbody = document.getElementById('announcementsTableFull');
-    
-    if (!tbody) return;
-    
-    tbody.innerHTML = announcements.map(a => {
-        const priorityClass = a.priority === 'High' ? 'danger' : a.priority === 'Normal' ? 'warning' : 'info';
-        const statusClass = a.status === 'Active' ? 'success' : 'secondary';
-        return `
-            <tr>
-                <td>${a.title}</td>
-                <td>${a.category}</td>
-                <td><span class="badge badge-${priorityClass}">${a.priority}</span></td>
-                <td>${a.postedBy}</td>
-                <td>${a.date}</td>
-                <td><span class="badge badge-${statusClass}">${a.status}</span></td>
-                <td class="actions">
-                    <button class="btn-icon"><i class="fas fa-eye"></i></button>
-                    <button class="btn-icon"><i class="fas fa-edit"></i></button>
-                    <button class="btn-icon danger"><i class="fas fa-trash"></i></button>
-                </td>
-            </tr>
-        `;
-    }).join('');
-}
-
-// Setup navigation
-function setupNavigation() {
-    const navItems = document.querySelectorAll('.nav-item[data-page]');
-    
-    navItems.forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.preventDefault();
-            const page = this.getAttribute('data-page');
-            navigateTo(page);
-            
-            // Update active state
-            navItems.forEach(n => n.classList.remove('active'));
-            this.classList.add('active');
+// Role-based Navigation
+const RoleNavigation = {
+    getNavigation(role) {
+        const navs = {
+            admin: [
+                { section: 'Main', items: [
+                    { page: 'dashboard', icon: 'fa-home', label: 'Dashboard' },
+                    { page: 'profile', icon: 'fa-user', label: 'My Profile' }
+                ]},
+                { section: 'People', items: [
+                    { page: 'students', icon: 'fa-user-graduate', label: 'Students' },
+                    { page: 'teachers', icon: 'fa-chalkboard-teacher', label: 'Teaching Staff' },
+                    { page: 'parents', icon: 'fa-users', label: 'Parents' }
+                ]},
+                { section: 'Academic', items: [
+                    { page: 'programs', icon: 'fa-graduation-cap', label: 'Programs' },
+                    { page: 'classes', icon: 'fa-door-open', label: 'Classes' }
+                ]},
+                { section: 'Committees', items: [
+                    { page: 'committees', icon: 'fa-users-cog', label: 'Committees' },
+                    { page: 'src', icon: 'fa-user-graduate', label: 'SRC' }
+                ]},
+                { section: 'Communication', items: [
+                    { page: 'announcements', icon: 'fa-bullhorn', label: 'Announcements' }
+                ]}
+            ],
+            student: [
+                { section: 'Main', items: [
+                    { page: 'dashboard', icon: 'fa-home', label: 'Dashboard' },
+                    { page: 'profile', icon: 'fa-user', label: 'My Profile' }
+                ]},
+                { section: 'My Academic', items: [
+                    { page: 'myresults', icon: 'fa-graduation-cap', label: 'My Results' },
+                    { page: 'myattendance', icon: 'fa-clipboard-check', label: 'My Attendance' },
+                    { page: 'myfees', icon: 'fa-money-bill-wave', label: 'My Fees' }
+                ]}
+            ],
+            parent: [
+                { section: 'Main', items: [
+                    { page: 'dashboard', icon: 'fa-home', label: 'Dashboard' },
+                    { page: 'profile', icon: 'fa-user', label: 'My Profile' }
+                ]},
+                { section: 'My Child', items: [
+                    { page: 'childprofile', icon: 'fa-user-graduate', label: "Child's Profile" },
+                    { page: 'childresults', icon: 'fa-graduation-cap', label: "Child's Results" }
+                ]}
+            ],
+            teacher: [
+                { section: 'Main', items: [
+                    { page: 'dashboard', icon: 'fa-home', label: 'Dashboard' },
+                    { page: 'profile', icon: 'fa-user', label: 'My Profile' }
+                ]},
+                { section: 'Teaching', items: [
+                    { page: 'students', icon: 'fa-user-graduate', label: 'Students' },
+                    { page: 'attendance', icon: 'fa-clipboard-check', label: 'Attendance' }
+                ]}
+            ],
+            default: [
+                { section: 'Main', items: [
+                    { page: 'dashboard', icon: 'fa-home', label: 'Dashboard' },
+                    { page: 'profile', icon: 'fa-user', label: 'My Profile' }
+                ]}
+            ]
+        };
+        return navs[role] || navs.default;
+    },
+    buildNavigation(role) {
+        const nav = this.getNavigation(role);
+        let html = '';
+        nav.forEach(s => {
+            html += '<div class="nav-section"><div class="nav-section-title">' + s.section + '</div>';
+            s.items.forEach(i => {
+                html += '<a href="#" class="nav-item" data-page="' + i.page + '"><i class="fas ' + i.icon + '"></i><span>' + i.label + '</span></a>';
+            });
+            html += '</div>';
         });
-    });
+        return html;
+    }
+};
+
+function getCurrentRole() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const roleFromUrl = urlParams.get('role');
+    if (roleFromUrl) {
+        sessionStorage.setItem('userRole', roleFromUrl);
+        return roleFromUrl;
+    }
+    return sessionStorage.getItem('userRole') || 'admin';
+}
+
+function initDashboard() {
+    const role = getCurrentRole();
+    const navContainer = document.querySelector('.sidebar-nav');
+    if (navContainer) {
+        navContainer.innerHTML = RoleNavigation.buildNavigation(role);
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const page = this.getAttribute('data-page');
+                navigateTo(page);
+            });
+        });
+    }
+    const user = getCurrentUser();
+    if (document.getElementById('userName')) document.getElementById('userName').textContent = user.name;
+    if (document.getElementById('userRole')) document.getElementById('userRole').textContent = user.role.charAt(0).toUpperCase() + user.role.slice(1);
+    loadRoleDashboard(role);
+}
+
+function loadRoleDashboard(role) {
+    const userId = parseInt(sessionStorage.getItem('userId'));
+    const studentId = parseInt(sessionStorage.getItem('studentId'));
+    let welcomeMsg = '', statsHtml = '', quickActions = '';
+    
+    if (role === 'student') {
+        welcomeMsg = 'Welcome back, ' + sessionStorage.getItem('userName') + '!';
+        statsHtml = '<div class="stat-card primary"><div class="stat-icon"><i class="fas fa-user-graduate"></i></div><div class="stat-content"><h3>My Profile</h3><p>Student</p></div></div>';
+        quickActions = '<div class="quick-action-btn" onclick="navigateTo(\'myresults\')"><i class="fas fa-graduation-cap"></i><span>My Results</span></div><div class="quick-action-btn" onclick="navigateTo(\'myattendance\')"><i class="fas fa-clipboard-check"></i><span>My Attendance</span></div>';
+    } else if (role === 'parent') {
+        welcomeMsg = 'Welcome, Parent!';
+        statsHtml = '<div class="stat-card primary"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-content"><h3>Your Child</h3><p>View Profile</p></div></div>';
+        quickActions = '<div class="quick-action-btn" onclick="navigateTo(\'childprofile\')"><i class="fas fa-user-graduate"></i><span>Child\'s Profile</span></div><div class="quick-action-btn" onclick="navigateTo(\'childresults\')"><i class="fas fa-graduation-cap"></i><span>Child\'s Results</span></div>';
+    } else if (role === 'teacher') {
+        welcomeMsg = 'Welcome, Teacher!';
+        statsHtml = '<div class="stat-card primary"><div class="stat-icon"><i class="fas fa-chalkboard-teacher"></i></div><div class="stat-content"><h3>Teaching</h3><p>View Classes</p></div></div>';
+        quickActions = '<div class="quick-action-btn" onclick="navigateTo(\'students\')"><i class="fas fa-user-graduate"></i><span>Students</span></div><div class="quick-action-btn" onclick="navigateTo(\'attendance\')"><i class="fas fa-clipboard-check"></i><span>Attendance</span></div>';
+    } else {
+        welcomeMsg = 'Welcome, ' + sessionStorage.getItem('userName') + '!';
+        statsHtml = '<div class="stat-card primary"><div class="stat-icon"><i class="fas fa-user-graduate"></i></div><div class="stat-content"><h3>Dashboard</h3><p>Overview</p></div></div>';
+        quickActions = '<div class="quick-action-btn" onclick="navigateTo(\'students\')"><i class="fas fa-user-graduate"></i><span>Students</span></div><div class="quick-action-btn" onclick="navigateTo(\'teachers\')"><i class="fas fa-chalkboard-teacher"></i><span>Teachers</span></div>';
+    }
+    
+    if (document.getElementById('welcomeMessage')) document.getElementById('welcomeMessage').textContent = welcomeMsg;
+    const statsGrid = document.querySelector('.stats-grid');
+    if (statsGrid) statsGrid.innerHTML = statsHtml;
+    if (document.getElementById('quickActions')) document.getElementById('quickActions').innerHTML = quickActions;
 }
 
 // Navigate to page
 function navigateTo(page) {
-    // Hide all pages
-    const pages = ['dashboardPage', 'studentsPage', 'teachersPage', 'nonteachingPage', 'parentsPage', 'visitorsPage', 'programsPage', 'classesPage', 
-                  'subjectsPage', 'departmentsPage', 'committeesPage', 'disciplinaryPage', 'ptaPage', 'admincouncilPage', 'srcPage', 'academicboardPage',
-                  'attendancePage', 'gradesPage', 'feesPage', 
-                  'admissionsPage', 'staffPage', 'libraryPage', 'inventoryPage',
-                  'announcementsPage', 'messagesPage', 'reportsPage', 'settingsPage',
-                  'timetablePage', 'defaultPage'];
+    const pages = ['dashboardPage', 'studentsPage', 'teachersPage', 'parentsPage', 'programsPage', 'committeesPage', 'srcPage', 'announcementsPage', 'defaultPage'];
     
     pages.forEach(p => {
         const el = document.getElementById(p);
         if (el) el.style.display = 'none';
     });
     
-    // Update page title
-    const pageTitles = {
-        dashboard: 'Dashboard',
-        students: 'Students',
-        teachers: 'Teaching Staff',
-        nonteaching: 'Non-Teaching Staff',
-        parents: 'Parents/Guardians',
-        visitors: 'Visitors/Outsiders',
-        programs: 'Programs/Courses',
-        classes: 'Classes',
-        subjects: 'Subjects',
-        departments: 'Departments',
-        committees: 'Committees',
-        disciplinary: 'Disciplinary Committee',
-        pta: 'PTA',
-        admincouncil: 'Admin Council',
-        src: 'SRC',
-        academicboard: 'Academic Board',
-        attendance: 'Attendance',
-        grades: 'Grades',
-        fees: 'Fees',
-        admissions: 'Admissions',
-        staff: 'Staff',
-        library: 'Library',
-        inventory: 'Inventory',
-        announcements: 'Announcements',
-        messages: 'Messages',
-        reports: 'Reports',
-        settings: 'Settings',
-        timetable: 'Timetable'
-    };
-    
-    document.getElementById('pageTitle').textContent = pageTitles[page] || 'Dashboard';
-    
-    // Show requested page
     const pageEl = document.getElementById(page + 'Page');
     if (pageEl) {
         pageEl.style.display = 'block';
@@ -541,19 +178,172 @@ function navigateTo(page) {
     }
 }
 
+// Setup navigation
+function setupNavigation() {
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const page = this.getAttribute('data-page');
+            navigateTo(page);
+        });
+    });
+}
+
+// Load all tables
+async function loadAllTables() {
+    await SchoolDB.open();
+    
+    const students = await SchoolDB.getAll('students');
+    const teachers = await SchoolDB.getAll('teachers');
+    const parents = await SchoolDB.getAll('parents');
+    const programs = await SchoolDB.getAll('programs');
+    const committees = await SchoolDB.getAll('committees');
+    const src = await SchoolDB.getAll('src');
+    const announcements = await SchoolDB.getAll('announcements');
+    
+    // Update stats
+    if (document.getElementById('totalStudents')) document.getElementById('totalStudents').textContent = students.length;
+    if (document.getElementById('totalTeachers')) document.getElementById('totalTeachers').textContent = teachers.length;
+    
+    // Load tables
+    loadStudentsTable(students);
+    loadTeachersTable(teachers);
+    loadProgramsTable(programs);
+    loadCommitteesTable(committees);
+    loadSRCTable(src);
+    loadAnnouncements(announcements);
+}
+
+function loadStudentsTable(students) {
+    const tbody = document.getElementById('studentsTable');
+    if (!tbody || !students) return;
+    
+    tbody.innerHTML = students.map(s => `
+        <tr>
+            <td>${s.admissionNo}</td>
+            <td>${s.firstName} ${s.lastName}</td>
+            <td>${s.gender}</td>
+            <td>${s.section}</td>
+            <td><span class="badge badge-success">${s.status}</span></td>
+        </tr>
+    `).join('');
+}
+
+function loadTeachersTable(teachers) {
+    const tbody = document.getElementById('teachersTable');
+    if (!tbody || !teachers) return;
+    
+    tbody.innerHTML = teachers.map(t => `
+        <tr>
+            <td>${t.firstName} ${t.lastName}</td>
+            <td>${t.department}</td>
+            <td>${t.qualification}</td>
+            <td>${t.phone}</td>
+            <td><span class="badge badge-success">${t.status}</span></td>
+        </tr>
+    `).join('');
+}
+
+function loadProgramsTable(programs) {
+    const tbody = document.getElementById('programsTable');
+    if (!tbody || !programs) return;
+    
+    tbody.innerHTML = programs.map(p => `
+        <tr>
+            <td><strong>${p.code}</strong></td>
+            <td>${p.name}</td>
+            <td><span class="badge badge-info">${p.category}</span></td>
+            <td>${p.duration}</td>
+            <td><span class="badge badge-success">${p.status}</span></td>
+        </tr>
+    `).join('');
+}
+
+function loadCommitteesTable(committees) {
+    const tbody = document.getElementById('committeesTable');
+    if (!tbody || !committees) return;
+    
+    tbody.innerHTML = committees.map(c => `
+        <tr>
+            <td><strong>${c.name}</strong></td>
+            <td><span class="badge badge-info">${c.type}</span></td>
+            <td>${c.description}</td>
+            <td>${c.meetingDay}</td>
+        </tr>
+    `).join('');
+}
+
+function loadSRCTable(src) {
+    const tbody = document.getElementById('srcTable');
+    if (!tbody || !src) return;
+    
+    tbody.innerHTML = src.map(s => `
+        <tr>
+            <td>${s.name}</td>
+            <td><span class="badge badge-primary">${s.position}</span></td>
+            <td>${s.class}</td>
+        </tr>
+    `).join('');
+}
+
+function loadAnnouncements(announcements) {
+    const tbody = document.getElementById('announcementsTableFull');
+    if (!tbody || !announcements) return;
+    
+    tbody.innerHTML = announcements.map(a => `
+        <tr>
+            <td>${a.title}</td>
+            <td>${a.category}</td>
+            <td><span class="badge badge-${a.priority === 'High' ? 'danger' : 'warning'}">${a.priority}</span></td>
+            <td>${a.postedBy}</td>
+            <td>${a.date}</td>
+        </tr>
+    `).join('');
+}
+
+// Check authentication
+function checkAuth() {
+    const loggedIn = sessionStorage.getItem('loggedIn');
+    if (!loggedIn) {
+        window.location.href = 'index.html';
+        return false;
+    }
+    return true;
+}
+
+// Get current user
+function getCurrentUser() {
+    return {
+        id: sessionStorage.getItem('userId'),
+        username: sessionStorage.getItem('username'),
+        name: sessionStorage.getItem('userName'),
+        role: sessionStorage.getItem('userRole'),
+        email: sessionStorage.getItem('userEmail')
+    };
+}
+
+// Update user info
+function updateUserInfo() {
+    const user = getCurrentUser();
+    const userNameEl = document.getElementById('userName');
+    const userRoleEl = document.getElementById('userRole');
+    
+    if (userNameEl && user.name) {
+        userNameEl.textContent = user.name;
+    }
+    if (userRoleEl && user.role) {
+        userRoleEl.textContent = user.role.charAt(0).toUpperCase() + user.role.slice(1);
+    }
+}
+
+// Logout
+function logout() {
+    sessionStorage.clear();
+    window.location.href = 'index.html';
+}
+
 // Toggle sidebar
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     sidebar.classList.toggle('active');
-}
-
-// Show add modal
-function showAddModal(type) {
-    alert('Add ' + type + ' modal would open here');
-}
-
-// Logout (called from header)
-function logout() {
-    sessionStorage.clear();
-    window.location.href = 'index.html';
 }

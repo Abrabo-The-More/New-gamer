@@ -81,7 +81,15 @@
         </div>
     </div>
 
-    <script src="js/database.js"></script>
+    <script src="js/indexeddb.js"></script>
+    <script>
+        // Wait for IndexedDB to initialize
+        async function initApp() {
+            await SchoolDB.open();
+            console.log('Ready!');
+        }
+        initApp();
+    </script>
     <script src="js/auth.js"></script>
 </body>
 </html>

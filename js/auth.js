@@ -20,7 +20,7 @@ function togglePassword() {
 }
 
 // Login function
-function login(event) {
+async function login(event) {
     event.preventDefault();
     
     const username = document.getElementById('username').value.trim();
@@ -29,38 +29,41 @@ function login(event) {
     const userRole = document.getElementById('userRole').value;
     const errorDiv = document.getElementById('loginError');
     
-    // Get users from database
-    const users = Database.getTable('users');
-    
-    // Find matching user
-    const user = users.find(u => 
-        u.username === username && 
-        u.password === password && 
-        u.code === secretCode &&
-        u.role === userRole
-    );
-    
-    if (user) {
-        // Save session
-        sessionStorage.setItem('loggedIn', 'true');
-        sessionStorage.setItem('userId', user.id);
-        sessionStorage.setItem('username', user.username);
-        sessionStorage.setItem('userName', user.name);
-        sessionStorage.setItem('userRole', user.role);
-        sessionStorage.setItem('userEmail', user.email);
+    try {
+        // Wait for database
+        await SchoolDB.open();
         
-        // Store student/parent linked ID
-        if (user.studentId) {
-            sessionStorage.setItem('studentId', user.studentId);
-        }
-        if (user.parentId) {
-            sessionStorage.setItem('parentId', user.parentId);
-        }
+        // Login using IndexedDB
+        const user = await SchoolDB.login(username, password, secretCode, userRole);
         
-        // Redirect based on role
-        window.location.href = 'dashboard.html?role=' + user.role;
-    } else {
-        // Show error
+        if (user) {
+            // Save session
+            sessionStorage.setItem('loggedIn', 'true');
+            sessionStorage.setItem('userId', user.id);
+            sessionStorage.setItem('username', user.username);
+            sessionStorage.setItem('userName', user.name);
+            sessionStorage.setItem('userRole', user.role);
+            sessionStorage.setItem('userEmail', user.email);
+            
+            // Store student/parent linked ID
+            if (user.studentId) {
+                sessionStorage.setItem('studentId', user.studentId);
+            }
+            if (user.parentId) {
+                sessionStorage.setItem('parentId', user.parentId);
+            }
+            
+            // Redirect based on role
+            window.location.href = 'dashboard.html?role=' + user.role;
+        } else {
+            // Show error
+            errorDiv.classList.add('show');
+            setTimeout(() => {
+                errorDiv.classList.remove('show');
+            }, 3000);
+        }
+    } catch (err) {
+        console.error('Login error:', err);
         errorDiv.classList.add('show');
         setTimeout(() => {
             errorDiv.classList.remove('show');
